@@ -7,6 +7,7 @@ import sys
 import numpy as np
 import tensorflow as tf
 import argparse
+import glob, os
 import os.path as osp
 from PIL import Image
 from functools import partial
@@ -63,6 +64,59 @@ def load_pascal(data_dir, split='train'):
             are ambiguous.
     """
     # Wrote this function
+    img_size = 256,256
+    images = []
+    for infile in glob.glob("./VOCdevkit/VOC2007/JPEGImages/*.jpg"):
+        # reshape the images to 256*256*3
+        try:
+            im = Image.open(infile)
+            resized_img = im.resize((256, 256), Image.ANTIALIAS)
+            resized_arr = np.array(resized_img)
+            images.append(resized_arr)
+            # np.asarray(images)
+            # print(np.shape(images))
+            print(type(images))
+        except IOError:
+            print("Error")
+
+        # convert list into ndarray
+        images = np.asarray(images)
+        images_size = np.shape(images)
+        images_num = images_size[0]
+        # label_mat: 2d array, each annotation file is one label_col, multiple label_col mean multiple annotation files
+        label_mat = np.array((images_num,21))
+        label_col = []
+
+        for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
+
+            if filename.endswith("test.txt"):
+                # print(os.path.join(directory, filename))
+                print(filename)
+                with open("./VOCdevkit/VOC2007/ImageSets/Main/"+filename) as fp:
+                    line = fp.readline()
+                    cnt = 1
+                    while line:
+                        print("Line {}: {}".format(cnt, line.strip()))
+                        line = fp.readline()
+                        label_col.append(line)
+                        cnt += 1
+                np.vstack(label_mat,label_col)
+                continue
+            else:
+                continue
+        print(np.shape(label_mat))
+
+
+                # with open("./VOCdevkit/VOC2007/ImageSets/Main/bird_test.txt") as fp:
+        #     line = fp.readline()
+        #     cnt = 1
+        #     while line:
+        #         print("Line {}: {}".format(cnt, line.strip()))
+        #         line = fp.readline()
+        #         cnt += 1
+
+
+    # for img_idx in range():
 
 
 def parse_args():

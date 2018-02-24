@@ -100,18 +100,28 @@ def main(unused_argv):
         batch_size=100,
         num_epochs=None,
         shuffle=True)
-    mnist_classifier.train(
-        input_fn=train_input_fn,
-        steps=33000,
-        hooks=[logging_hook])
-    # Evaluate the model and print results
-    eval_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": eval_data},
-        y=eval_labels,
-        num_epochs=1,
-        shuffle=False)
-    eval_results = mnist_classifier.evaluate(input_fn=eval_input_fn)
-    print(eval_results)
+
+
+
+    print("train_input_fn ------------------> mnist_classifier.train")
+    for iteration in range(20):
+        mnist_classifier.train(
+            input_fn=train_input_fn,
+            steps=10,
+            hooks=[logging_hook])
+        print("#####################################")
+        if iteration%10==0:
+            eval_input_fn = tf.estimator.inputs.numpy_input_fn(
+                x={"x": eval_data},
+                y=eval_labels,
+                num_epochs=1,
+                shuffle=False)
+            # Evaluate the model and print results
+            eval_results = mnist_classifier.evaluate(input_fn=eval_input_fn)
+            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
+    print("mnist_classifier.train ------------------> eval_input_fn")
+
 
 
 if __name__ == "__main__":
