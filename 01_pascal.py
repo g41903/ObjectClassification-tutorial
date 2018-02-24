@@ -13,7 +13,9 @@ from PIL import Image
 from functools import partial
 
 from eval import compute_map
-import models
+from tempfile import TemporaryFile
+
+# import models
 
 # Run the code, type the command in the terminal
 # python 01_pascal.py /home/teame-predict/Documents/ernie/ObjectClassification-tutorial
@@ -46,7 +48,75 @@ CLASS_NAMES = [
 
 def cnn_model_fn(features, labels, mode, num_classes=20):
     # Write this function
-    return 0
+    """Model function for CNN."""
+    # Input Layer
+    print('{}: {}'.format(np.shape(features), np.shape(labels)))
+    input_layer = tf.reshape(features["x"], [-1, 256, 256, 3])
+
+    # Convolutional Layer #1
+    conv1 = tf.layers.conv2d(
+        inputs=input_layer,
+        filters=32,
+        kernel_size=[5, 5],
+        padding="same",
+        activation=tf.nn.sigmoid())
+
+    # Pooling Layer #1
+    pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[2, 2], strides=2)
+
+    # Convolutional Layer #2 and Pooling Layer #2
+    conv2 = tf.layers.conv2d(
+        inputs=pool1,
+        filters=64,
+        kernel_size=[5, 5],
+        padding="same",
+        activation=tf.nn.sigmoid())
+
+    pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[2, 2], strides=2)
+
+    # Dense Layer
+    pool2_flat = tf.reshape(pool2, [-1, 256 * 256 * 64])
+    dense = tf.layers.dense(inputs=pool2_flat, units=1024,
+                            activation=tf.nn.relu)
+    dropout = tf.layers.dropout(
+        inputs=dense, rate=0.4, training=mode == tf.estimator.ModeKeys.TRAIN)
+
+    # Logits Layer
+    logits = tf.layers.dense(inputs=dropout, units=10)
+
+    predictions = {
+        # Generate predictions (for PREDICT and EVAL mode)
+        "classes": tf.argmax(input=logits, axis=1),
+        # Add `softmax_tensor` to the graph. It is used for PREDICT and by the
+        # `logging_hook`.
+        # "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
+        "probabilities": tf.nn.sigmoid(x=logits)
+    }
+
+    if mode == tf.estimator.ModeKeys.PREDICT:
+        return tf.estimator.EstimatorSpec(mode=mode, predictions=predictions)
+
+    # Calculate Loss (for both TRAIN and EVAL modes)
+    # onehot_labels = tf.one_hot(indices=tf.cast(labels, tf.int32), depth=10)
+    # loss = tf.identity(tf.losses.softmax_cross_entropy(
+    #     onehot_labels=labels, logits=logits), name='loss')
+    loss = tf.losses.sigmoid_cross_entropy(multi_class_labels=labels,logits=logits)
+
+    # Configure the Training Op (for TRAIN mode)
+    if mode == tf.estimator.ModeKeys.TRAIN:
+        optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
+        train_op = optimizer.minimize(
+            loss=loss,
+            global_step=tf.train.get_global_step())
+        return tf.estimator.EstimatorSpec(
+            mode=mode, loss=loss, train_op=train_op)
+
+    # Add evaluation metrics (for EVAL mode)
+    eval_metric_ops = {
+        "accuracy": tf.metrics.accuracy(
+            labels=labels, predictions=predictions["classes"])}
+    return tf.estimator.EstimatorSpec(
+        mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
 
 
 
@@ -71,6 +141,9 @@ def load_pascal(data_dir, split='train'):
     # Wrote this function
     img_size = 256,256
     images = []
+    print("Begin Load Images ------------------------------------")
+    testFile = TemporaryFile()
+    docs_dir = os.path.expanduser('~/Documents')
     for infile in glob.glob("./VOCdevkit/VOC2007/JPEGImages/*.jpg"):
         # reshape the images to 256*256*3
         try:
@@ -81,65 +154,68 @@ def load_pascal(data_dir, split='train'):
             # np.asarray(images)
             # print(np.shape(images))
             # print(type(images))
+            # print("save image")
+
         except IOError:
             print("Error")
 
-        # convert list into ndarray
-        np_images = np.asarray(images)
-        images_size = np.shape(np_images)
-        images_num = images_size[0]
-        # label_mat: 2d array, each annotation file is one label_col, multiple label_col mean multiple annotation files
-        label_mat = []
-        weight_mat = []
+    # convert list into ndarray
+    np_images = np.asarray(images)
+    images_size = np.shape(np_images)
+    images_num = images_size[0]
+    # label_mat: 2d array, each annotation file is one label_col, multiple label_col mean multiple annotation files
+    label_mat = []
+    weight_mat = []
+    print("Return Load Images ------------------------------------")
 
-        for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
+    for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
 
-            if filename.endswith("test.txt"):
-                # print(os.path.join(directory, filename))
-                # print(filename)
-                with open("./VOCdevkit/VOC2007/ImageSets/Main/"+filename) as fp:
-                    label_col = []
-                    weight_col = []
+        if filename.endswith("test.txt"):
+            # print(os.path.join(directory, filename))
+            # print(filename)
+            with open("./VOCdevkit/VOC2007/ImageSets/Main/"+filename) as fp:
+                label_col = []
+                weight_col = []
+                line = fp.readline()
+                cnt = 1
+                while line:
+                    # print("Line {}: {}".format(cnt, line.strip()))
+                    # print("Line {}: {}".format(cnt, line.strip()[-2,:]))
+                    label_flag = int(line.strip()[-2:])
+                    if label_flag is 0 or label_flag is -1:
+                        label_col.append(0)
+                    else:
+                        label_col.append(1)
+
+                    if label_flag is 1 or label_flag is -1:
+                        weight_col.append(1)
+                    else:
+                        weight_col.append(0)
+
                     line = fp.readline()
-                    cnt = 1
-                    while line:
-                        # print("Line {}: {}".format(cnt, line.strip()))
-                        # print("Line {}: {}".format(cnt, line.strip()[-2,:]))
-                        label_flag = int(line.strip()[-2:])
-                        if label_flag is 0 or label_flag is -1:
-                            label_col.append(0)
-                        else:
-                            label_col.append(1)
+                    cnt += 1
+                # print(np.shape(label_col))
+                label_mat.append(label_col)
+                weight_mat.append(weight_col)
+            continue
+        else:
+            continue
 
-                        if label_flag is 1 or label_flag is -1:
-                            weight_col.append(1)
-                        else:
-                            weight_col.append(0)
-
-                        line = fp.readline()
-                        cnt += 1
-                    # print(np.shape(label_col))
-                    label_mat.append(label_col)
-                    weight_mat.append(weight_col)
-                continue
-            else:
-                continue
-
-        np_label_mat = np.asarray(label_mat)
-        np_weight_mat = np.asarray(weight_mat)
-        np_label_mat = np_label_mat.transpose()
-        np_weight_mat = np_weight_mat.transpose()
-        print(np.shape(np_label_mat))
-        print(np.shape(np_weight_mat))
-
-    return np_images, label_mat, weight_mat
+    np_label_mat = np.asarray(label_mat)
+    np_weight_mat = np.asarray(weight_mat)
+    np_label_mat = np_label_mat.transpose()
+    np_weight_mat = np_weight_mat.transpose()
+    # print(np.shape(np_label_mat))
+    # print(np.shape(np_weight_mat))
+    print("Return Load Weights and Labels ------------------------------------")
+    return np_images, np_label_mat, np_weight_mat
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         description='Train a classifier in tensorflow!')
     parser.add_argument(
-        'data_dir', type=str, default='data/VOC2007',
+        'data_dir', type=str, default='/home/teame-predict/Documents/ernie/ObjectClassification-tutorial',
         help='Path to PASCAL data storage')
     print("-----------------------------------")
     if len(sys.argv) == 1:
@@ -160,18 +236,51 @@ def _get_el(arr, i):
 
 
 def main():
-    args = parse_args()
-    print(args)
+
+    # args = parse_args()
+    # print(args)
     # Load training and eval data
+
+    # outfile_train_data = TemporaryFile()
+    # outfile_train_labels = TemporaryFile()
+    # outfile_train_weights = TemporaryFile()
+    # outfile_eval_data = TemporaryFile()
+    # outfile_eval_labels = TemporaryFile()
+    # outfile_eval_weights = TemporaryFile()
+    data_dir = '/home/teame-predict/Documents/ernie/ObjectClassification-tutorial'
+
     train_data, train_labels, train_weights = load_pascal(
-        args.data_dir, split='trainval')
+        data_dir, split='trainval')
     eval_data, eval_labels, eval_weights = load_pascal(
-        args.data_dir, split='test')
+        data_dir, split='test')
+
+    # save files
+    print("Save Fast load pascal data----------------")
+    docs_dir = os.path.expanduser('~/Documents/ernie')
+    np.save(os.path.join(docs_dir, 'outfile_train_data'), train_data)
+    np.save(os.path.join(docs_dir, 'outfile_train_labels'), train_labels)
+    np.save(os.path.join(docs_dir, 'outfile_train_weights'), train_weights)
+    np.save(os.path.join(docs_dir, 'outfile_eval_data'), eval_data)
+    np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
+    np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
+    print("Finished Fast load pascal data----------------")
+
+
+    # print("Fast load pascal data----------------")
+    # train_data = np.load(os.path.join(docs_dir, 'outfile_train_data.npy'))
+    # train_labels = np.load(os.path.join(docs_dir, 'outfile_train_labels.npy'))
+    # train_weights = np.load(os.path.join(docs_dir, 'outfile_train_weights.npy'))
+    # eval_data = np.load(os.path.join(docs_dir, 'outfile_eval_data.npy'))
+    # eval_labels = np.load(os.path.join(docs_dir, 'outfile_eval_labels.npy'))
+    # eval_weights = np.load(os.path.join(docs_dir, 'outfile_eval_weights.npy'))
+    # print('train_data {}: train_labels{} train_weights{}'.format(np.shape(train_data), np.shape(train_labels),np.shape(train_weights)))
+    # print("Finish load pascal data----------------")
 
     pascal_classifier = tf.estimator.Estimator(
         model_fn=partial(cnn_model_fn,
                          num_classes=train_labels.shape[1]),
         model_dir="/tmp/pascal_model_scratch")
+
     tensors_to_log = {"loss": "loss"}
     logging_hook = tf.train.LoggingTensorHook(
         tensors=tensors_to_log, every_n_iter=10)
@@ -179,12 +288,12 @@ def main():
     train_input_fn = tf.estimator.inputs.numpy_input_fn(
         x={"x": train_data, "w": train_weights},
         y=train_labels,
-        batch_size=BATCH_SIZE,
+        batch_size=10,
         num_epochs=None,
         shuffle=True)
     pascal_classifier.train(
         input_fn=train_input_fn,
-        steps=NUM_ITERS,
+        steps=10,
         hooks=[logging_hook])
     # Evaluate the model and print results
     eval_input_fn = tf.estimator.inputs.numpy_input_fn(
