@@ -15,6 +15,9 @@ from functools import partial
 from eval import compute_map
 import models
 
+# Run the code, type the command in the terminal
+# python 01_pascal.py /home/teame-predict/Documents/ernie/ObjectClassification-tutorial
+
 tf.logging.set_verbosity(tf.logging.INFO)
 
 CLASS_NAMES = [
@@ -43,6 +46,8 @@ CLASS_NAMES = [
 
 def cnn_model_fn(features, labels, mode, num_classes=20):
     # Write this function
+    return 0
+
 
 
 def load_pascal(data_dir, split='train'):
@@ -60,7 +65,7 @@ def load_pascal(data_dir, split='train'):
             are active in that image.
         weights: (np.ndarray): An array of shape (N, 20) of
             type np.int32, with 0s and 1s; 1s for classes that
-            are confidently labeled and 0s for classes that 
+            are confidently labeled and 0s for classes that
             are ambiguous.
     """
     # Wrote this function
@@ -75,48 +80,59 @@ def load_pascal(data_dir, split='train'):
             images.append(resized_arr)
             # np.asarray(images)
             # print(np.shape(images))
-            print(type(images))
+            # print(type(images))
         except IOError:
             print("Error")
 
         # convert list into ndarray
-        images = np.asarray(images)
-        images_size = np.shape(images)
+        np_images = np.asarray(images)
+        images_size = np.shape(np_images)
         images_num = images_size[0]
         # label_mat: 2d array, each annotation file is one label_col, multiple label_col mean multiple annotation files
-        label_mat = np.array((images_num,21))
-        label_col = []
+        label_mat = []
+        weight_mat = []
 
         for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
 
             if filename.endswith("test.txt"):
                 # print(os.path.join(directory, filename))
-                print(filename)
+                # print(filename)
                 with open("./VOCdevkit/VOC2007/ImageSets/Main/"+filename) as fp:
+                    label_col = []
+                    weight_col = []
                     line = fp.readline()
                     cnt = 1
                     while line:
-                        print("Line {}: {}".format(cnt, line.strip()))
+                        # print("Line {}: {}".format(cnt, line.strip()))
+                        # print("Line {}: {}".format(cnt, line.strip()[-2,:]))
+                        label_flag = int(line.strip()[-2:])
+                        if label_flag is 0 or label_flag is -1:
+                            label_col.append(0)
+                        else:
+                            label_col.append(1)
+
+                        if label_flag is 1 or label_flag is -1:
+                            weight_col.append(1)
+                        else:
+                            weight_col.append(0)
+
                         line = fp.readline()
-                        label_col.append(line)
                         cnt += 1
-                np.vstack(label_mat,label_col)
+                    # print(np.shape(label_col))
+                    label_mat.append(label_col)
+                    weight_mat.append(weight_col)
                 continue
             else:
                 continue
-        print(np.shape(label_mat))
 
+        np_label_mat = np.asarray(label_mat)
+        np_weight_mat = np.asarray(weight_mat)
+        np_label_mat = np_label_mat.transpose()
+        np_weight_mat = np_weight_mat.transpose()
+        print(np.shape(np_label_mat))
+        print(np.shape(np_weight_mat))
 
-                # with open("./VOCdevkit/VOC2007/ImageSets/Main/bird_test.txt") as fp:
-        #     line = fp.readline()
-        #     cnt = 1
-        #     while line:
-        #         print("Line {}: {}".format(cnt, line.strip()))
-        #         line = fp.readline()
-        #         cnt += 1
-
-
-    # for img_idx in range():
+    return np_images, label_mat, weight_mat
 
 
 def parse_args():
@@ -125,10 +141,14 @@ def parse_args():
     parser.add_argument(
         'data_dir', type=str, default='data/VOC2007',
         help='Path to PASCAL data storage')
+    print("-----------------------------------")
     if len(sys.argv) == 1:
+        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
         parser.print_help()
         sys.exit(1)
     args = parser.parse_args()
+    print("args")
+    print("#####################################")
     return args
 
 
@@ -141,6 +161,7 @@ def _get_el(arr, i):
 
 def main():
     args = parse_args()
+    print(args)
     # Load training and eval data
     train_data, train_labels, train_weights = load_pascal(
         args.data_dir, split='trainval')
