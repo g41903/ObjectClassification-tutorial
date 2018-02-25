@@ -441,7 +441,7 @@ def main():
     print('02_Alexnet Random AP: {} mAP'.format(np.mean(rand_AP)))
     gt_AP = compute_map(
         eval_labels, eval_labels, eval_weights, average=None)
-    print('02_al02_Alexnetexnet GT AP: {} mAP'.format(np.mean(gt_AP)))
+    print('02_Alexnet GT AP: {} mAP'.format(np.mean(gt_AP)))
     AP = compute_map(eval_labels, pred, eval_weights, average=None)
     print('02_Alexnet Obtained {} mAP'.format(np.mean(AP)))
     print('02_Alexnet per class:')
