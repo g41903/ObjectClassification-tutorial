@@ -11,9 +11,13 @@ import glob, os
 import os.path as osp
 from PIL import Image
 from functools import partial
-
 from eval import compute_map
+
+# extra
 from tempfile import TemporaryFile
+import pickle
+
+
 
 # import models
 
@@ -44,6 +48,15 @@ CLASS_NAMES = [
     'train',
     'tvmonitor',
 ]
+docs_dir = os.path.expanduser('~/Documents/ernie')
+
+def save_obj(obj, name ):
+    with open(docs_dir+'/'+ name + '.pkl', 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+def load_obj(name):
+    with open(docs_dir+'/' + name + '.pkl', 'rb') as f:
+        return pickle.load(f)
 
 
 def cnn_model_fn(features, labels, mode, num_classes=20):
@@ -59,7 +72,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         filters=32,
         kernel_size=[5, 5],
         padding="same",
-        activation=tf.nn.sigmoid())
+        activation=tf.nn.relu)
 
     # Pooling Layer #1
     pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[2, 2], strides=2)
@@ -70,7 +83,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         filters=64,
         kernel_size=[5, 5],
         padding="same",
-        activation=tf.nn.sigmoid())
+        activation=tf.nn.relu)
 
     pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[2, 2], strides=2)
 
@@ -90,7 +103,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         # Add `softmax_tensor` to the graph. It is used for PREDICT and by the
         # `logging_hook`.
         # "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
-        "probabilities": tf.nn.sigmoid(x=logits)
+        "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
     }
 
     if mode == tf.estimator.ModeKeys.PREDICT:
@@ -98,9 +111,9 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     # Calculate Loss (for both TRAIN and EVAL modes)
     # onehot_labels = tf.one_hot(indices=tf.cast(labels, tf.int32), depth=10)
-    # loss = tf.identity(tf.losses.softmax_cross_entropy(
-    #     onehot_labels=labels, logits=logits), name='loss')
-    loss = tf.losses.sigmoid_cross_entropy(multi_class_labels=labels,logits=logits)
+    loss = tf.identity(tf.losses.softmax_cross_entropy(
+        onehot_labels=labels, logits=logits), name='loss')
+    loss = tf.identity(tf.losses.sigmoid_cross_entropy(multi_class_labels=labels,logits=logits))
 
     # Configure the Training Op (for TRAIN mode)
     if mode == tf.estimator.ModeKeys.TRAIN:
@@ -139,76 +152,113 @@ def load_pascal(data_dir, split='train'):
             are ambiguous.
     """
     # Wrote this function
-    img_size = 256,256
-    images = []
+    # idx = 0
+    # if idx >20:
+    #     idx+=1
+    #     break
+
     print("Begin Load Images ------------------------------------")
-    testFile = TemporaryFile()
-    docs_dir = os.path.expanduser('~/Documents')
+    images = []
+    # images_dict -> key: img_file_idx, value: rgb image ndarray (256*256*3)
+    images_dict = {}
+
     for infile in glob.glob("./VOCdevkit/VOC2007/JPEGImages/*.jpg"):
         # reshape the images to 256*256*3
+        file, ext = os.path.splitext(infile)
+        file_idx = file[-6:]
         try:
             im = Image.open(infile)
             resized_img = im.resize((256, 256), Image.ANTIALIAS)
             resized_arr = np.array(resized_img)
-            images.append(resized_arr)
+            images_dict[file_idx] = resized_arr.astype(float)
             # np.asarray(images)
             # print(np.shape(images))
             # print(type(images))
             # print("save image")
-
         except IOError:
             print("Error")
+    # np.save(os.path.join(docs_dir, 'image_dict'), images_dict)
+    save_obj(images_dict,"images_dict")
 
-    # convert list into ndarray
-    np_images = np.asarray(images)
-    images_size = np.shape(np_images)
-    images_num = images_size[0]
     # label_mat: 2d array, each annotation file is one label_col, multiple label_col mean multiple annotation files
     label_mat = []
     weight_mat = []
+    image_mat = []
+
+    # images_dict = np.load(os.path.join(docs_dir, 'image_dict.npy'))
+    # images_dict = load_obj("images_dict")
     print("Return Load Images ------------------------------------")
 
+    idx= 0
+    line_limit =9960
     for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
 
-        if filename.endswith("test.txt"):
+        ## deploy
+        if filename.endswith(split+".txt"):
+        ## test
+        # if filename.endswith("test.txt"):
+            # if idx > 20:
+            #     idx+=1
+            #     break
             # print(os.path.join(directory, filename))
             # print(filename)
             with open("./VOCdevkit/VOC2007/ImageSets/Main/"+filename) as fp:
+                image_mat = []
                 label_col = []
                 weight_col = []
                 line = fp.readline()
                 cnt = 1
                 while line:
-                    # print("Line {}: {}".format(cnt, line.strip()))
-                    # print("Line {}: {}".format(cnt, line.strip()[-2,:]))
+
+                    label_idx = line.strip()[:-2]
+                    if (int(label_idx)>line_limit or int(label_idx)<=0):
+                        break
+
+                    try:
+                        # print("Line {}: {}".format(label_idx, type(label_idx)))
+                        # Be aware!! '000005 ' is different from '000005', there is a space in the first string!!!
+                        # label_idx = '000005 ' label_idx[:-1]='000005'
+                        image_mat.append(images_dict[label_idx[:-1]])
+                    except IOError:
+                        print("Error Line {}: {}".format(label_idx, type(label_idx)))
+
                     label_flag = int(line.strip()[-2:])
+
                     if label_flag is 0 or label_flag is -1:
-                        label_col.append(0)
+                        label_col.append(0.0)
                     else:
-                        label_col.append(1)
+                        label_col.append(1.0)
 
                     if label_flag is 1 or label_flag is -1:
-                        weight_col.append(1)
+                        weight_col.append(1.0)
                     else:
-                        weight_col.append(0)
+                        weight_col.append(0.0)
 
                     line = fp.readline()
                     cnt += 1
-                # print(np.shape(label_col))
-                label_mat.append(label_col)
+                np_label_col = np.asarray(label_col)
+                label_mat.append(np_label_col)
+                print(np.shape(label_mat))
                 weight_mat.append(weight_col)
             continue
         else:
             continue
 
+    print("********************")
+    # print('image_mat {}: label_mat {}'.format(np.shape(image_mat), np.shape(label_mat)))
+    np_image_mat = np.asarray(image_mat)
     np_label_mat = np.asarray(label_mat)
     np_weight_mat = np.asarray(weight_mat)
-    np_label_mat = np_label_mat.transpose()
-    np_weight_mat = np_weight_mat.transpose()
+    # print('np_image_mat {}: np_label_mat {}'.format(np.shape(np_image_mat), np.shape(np_label_mat)))
+    np_trans_label_mat = np_label_mat.transpose()
+    np_trans_weight_mat = np_weight_mat.transpose()
     # print(np.shape(np_label_mat))
     # print(np.shape(np_weight_mat))
+    print('np_trans_label_mat {}: np_trans_weight_mat {}'.format(np.shape(np_trans_label_mat), np.shape(np_trans_weight_mat)))
     print("Return Load Weights and Labels ------------------------------------")
-    return np_images, np_label_mat, np_weight_mat
+
+
+    return np_image_mat, np_trans_label_mat, np_trans_weight_mat
 
 
 def parse_args():
@@ -256,7 +306,7 @@ def main():
 
     # save files
     print("Save Fast load pascal data----------------")
-    docs_dir = os.path.expanduser('~/Documents/ernie')
+
     np.save(os.path.join(docs_dir, 'outfile_train_data'), train_data)
     np.save(os.path.join(docs_dir, 'outfile_train_labels'), train_labels)
     np.save(os.path.join(docs_dir, 'outfile_train_weights'), train_weights)
