@@ -69,34 +69,66 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     # Convolutional Layer #1
     conv1 = tf.layers.conv2d(
         inputs=input_layer,
-        filters=32,
-        kernel_size=[5, 5],
-        padding="same",
+        filters=96,
+        kernel_size=[11, 11],
+        strides=(4, 4),
+        padding="valid",
         activation=tf.nn.relu)
-
     # Pooling Layer #1
-    pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[2, 2], strides=2)
+    pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[3, 3], strides=2)
 
     # Convolutional Layer #2 and Pooling Layer #2
     conv2 = tf.layers.conv2d(
         inputs=pool1,
-        filters=64,
+        filters=256,
         kernel_size=[5, 5],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+    pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[3, 3], strides=2)
+
+    # Convolutional Layer #3 and Pooling Layer #3
+    conv3 = tf.layers.conv2d(
+        inputs=pool2,
+        filters=384,
+        kernel_size=[3, 3],
+        strides=(1, 1),
         padding="same",
         activation=tf.nn.relu)
 
-    pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[2, 2], strides=2)
+    # Convolutional Layer #4 and Pooling Layer #4
+    conv4 = tf.layers.conv2d(
+        inputs=conv3,
+        filters=256,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+
+    # Convolutional Layer #2 and Pooling Layer #2
+    conv5 = tf.layers.conv2d(
+        inputs=conv4,
+        filters=246,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same")
+    pool5 = tf.layers.max_pooling2d(inputs=conv5, pool_size=[3, 3], strides=2)
 
     # Dense Layer
-    # shape_num = poo2.get_shape()
-    pool2_flat = tf.reshape(pool2, [-1, 64 * 64 * 64])
-    dense = tf.layers.dense(inputs=pool2_flat, units=1024,
-                            activation=tf.nn.relu)
-    dropout = tf.layers.dropout(
-        inputs=dense, rate=0.4, training=mode == tf.estimator.ModeKeys.TRAIN)
+    pool5_shape = pool5.get_shape()
+    pool5_flat = tf.reshape(pool5, [-1, pool5_shape])
 
+    dense6 = tf.layers.dense(inputs=pool5_flat, units=4096,
+                            activation=tf.nn.relu)
+    dropout6 = tf.layers.dropout(
+        inputs=dense6, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
+
+    dense7 = tf.layers.dense(inputs=dropout6, units=4096,
+                            activation=tf.nn.relu)
+    dropout6 = tf.layers.dropout(
+        inputs=dense7, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
     # Logits Layer
-    logits = tf.layers.dense(inputs=dropout, units=20)
+    logits = tf.layers.dense(inputs=dropout6, units=20)
 
     predictions = {
         # Generate predictions (for PREDICT and EVAL mode)
