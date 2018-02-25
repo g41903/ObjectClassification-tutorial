@@ -280,7 +280,7 @@ def main():
     # outfile_eval_weights = TemporaryFile()
     data_dir = '/home/teame-predict/Documents/ernie/ObjectClassification-tutorial'
 
-    '''
+
     train_data, train_labels, train_weights = load_pascal(
         data_dir, split='trainval')
     eval_data, eval_labels, eval_weights = load_pascal(
@@ -296,7 +296,7 @@ def main():
     np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
     np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
     print("Finished Fast load pascal data----------------")
-    '''
+
 
     print("Fast load pascal data----------------")
     train_data = np.load(os.path.join(docs_dir, 'outfile_train_data.npy'))

@@ -241,93 +241,80 @@ def load_pascal(data_dir, split='train'):
     # if idx >20:
     #     idx+=1
     #     break
-
+    """
     print("Begin Load Images ------------------------------------")
     images = []
     # images_dict -> key: img_file_idx, value: rgb image ndarray (256*256*3)
     images_dict = {}
-    '''
+    # count
     for infile in glob.glob("./VOCdevkit/VOC2007/JPEGImages/*.jpg"):
         # reshape the images to 256*256*3
         file, ext = os.path.splitext(infile)
         file_idx = file[-6:]
+
         try:
             im = Image.open(infile)
             resized_img = im.resize((256, 256), Image.ANTIALIAS)
             resized_arr = np.array(resized_img)
             images_dict[file_idx] = resized_arr.astype(np.float32)
-            # np.asarray(images)
-            # print(np.shape(images))
-            # print(type(images))
-            # print("save image")
         except IOError:
             print("Error")
-    # np.save(os.path.join(docs_dir, 'image_dict'), images_dict)
+
     save_obj(images_dict,"images_dict")
-    '''
+    """
     # label_mat: 2d array, each annotation file is one label_col, multiple label_col mean multiple annotation files
     label_mat = []
     weight_mat = []
     image_mat = []
 
-    # images_dict = np.load(os.path.join(docs_dir, 'image_dict.npy'))
     images_dict = load_obj("images_dict")
     print("Return Load Images ------------------------------------")
 
     idx= 0
     line_limit =9960
-    for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
+    # for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
+    for filename in enumerate(CLASS_NAMES):
 
-        ## deploy
-        if filename.endswith(split+".txt"):
-        ## test
-        # if filename.endswith("test.txt"):
-            # if idx > 20:
-            #     idx+=1
-            #     break
-            # print(os.path.join(directory, filename))
-            # print(filename)
-            with open("./VOCdevkit/VOC2007/ImageSets/Main/"+filename) as fp:
-                image_mat = []
-                label_col = []
-                weight_col = []
+        with open("./VOCdevkit/VOC2007/ImageSets/Main/"+filename[1] +"_"+split+".txt") as fp:
+            print(fp)
+            image_mat = []
+            label_col = []
+            weight_col = []
+            line = fp.readline()
+            cnt = 1
+            while line:
+
+                label_idx = line.strip()[:-3]
+                #if (int(label_idx)>line_limit or int(label_idx)<=0):
+                #    break
+                try:
+                    # print("Line {}: {}".format(label_idx, type(label_idx)))
+                    # Be aware!! '000005 ' is different from '000005', there is a space in the first string!!!
+                    # label_idx = '000005 ' label_idx[:-1]='000005'
+                    image_mat.append(images_dict[label_idx])
+                except IOError:
+                    print("Error Line {}: {}".format(label_idx, type(label_idx)))
+
+                label_flag = int(line.strip()[-2:])
+
+                if label_flag is 0 or label_flag is -1:
+                    label_col.append(np.int32(0))
+                else:
+                    label_col.append(np.int32(1))
+
+                if label_flag is 1 or label_flag is -1:
+                    weight_col.append(np.int32(1))
+                else:
+                    weight_col.append(np.int32(0))
+
                 line = fp.readline()
-                cnt = 1
-                while line:
+                cnt += 1
+            np_label_col = np.asarray(label_col)
+            label_mat.append(np_label_col)
+            # print(np.shape(label_mat))
+            np_weight_col = np.asarray(weight_col)
+            weight_mat.append(np_weight_col)
 
-                    label_idx = line.strip()[:-2]
-                    if (int(label_idx)>line_limit or int(label_idx)<=0):
-                        break
-
-                    try:
-                        # print("Line {}: {}".format(label_idx, type(label_idx)))
-                        # Be aware!! '000005 ' is different from '000005', there is a space in the first string!!!
-                        # label_idx = '000005 ' label_idx[:-1]='000005'
-                        image_mat.append(images_dict[label_idx[:-1]])
-                    except IOError:
-                        print("Error Line {}: {}".format(label_idx, type(label_idx)))
-
-                    label_flag = int(line.strip()[-2:])
-
-                    if label_flag is 0 or label_flag is -1:
-                        label_col.append(0.0)
-                    else:
-                        label_col.append(1.0)
-
-                    if label_flag is 1 or label_flag is -1:
-                        weight_col.append(1.0)
-                    else:
-                        weight_col.append(0.0)
-
-                    line = fp.readline()
-                    cnt += 1
-                np_label_col = np.asarray(label_col)
-                label_mat.append(np_label_col)
-                # print(np.shape(label_mat))
-                weight_mat.append(weight_col)
-            continue
-        else:
-            continue
 
     print("********************")
     # print('image_mat {}: label_mat {}'.format(np.shape(image_mat), np.shape(label_mat)))
@@ -341,8 +328,6 @@ def load_pascal(data_dir, split='train'):
     # print(np.shape(np_weight_mat))
     print('np_trans_label_mat {}: np_trans_weight_mat {}'.format(np.shape(np_trans_label_mat), np.shape(np_trans_weight_mat)))
     print("Return Load Weights and Labels ------------------------------------")
-
-
     return np_image_mat, np_trans_label_mat, np_trans_weight_mat
 
 
