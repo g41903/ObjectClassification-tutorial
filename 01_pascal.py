@@ -170,7 +170,7 @@ def load_pascal(data_dir, split='train'):
             im = Image.open(infile)
             resized_img = im.resize((256, 256), Image.ANTIALIAS)
             resized_arr = np.array(resized_img)
-            images_dict[file_idx] = resized_arr.astype(float)
+            images_dict[file_idx] = resized_arr.astype(np.float32)
             # np.asarray(images)
             # print(np.shape(images))
             # print(type(images))
