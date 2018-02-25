@@ -7,7 +7,7 @@ from __future__ import print_function
 # Impor
 import numpy as np
 import tensorflow as tf
-
+import eval as eval
 tf.logging.set_verbosity(tf.logging.INFO)
 
 
@@ -107,7 +107,7 @@ def main(unused_argv):
         train_input_fn = tf.estimator.inputs.numpy_input_fn(
             x={"x": train_data},
             y=train_labels,
-            batch_size=100,
+            batch_size=10,
             num_epochs=None,
             shuffle=True)
 
@@ -117,22 +117,27 @@ def main(unused_argv):
             num_epochs=1,
             shuffle=False)
 
-        mnist_classifier.train(
+        train_results = mnist_classifier.train(
             input_fn=train_input_fn,
-            steps=100,
+            steps=2,
             hooks=[logging_hook])
+        print("train_results result is {}: ".format(train_results))
 
         # Evaluate the model and print results
         eval_results = mnist_classifier.evaluate(input_fn=eval_input_fn)
-        print("eval result is {}: ".format(eval_results))
-        pred = mnist_classifier.predict(input_fn=eval_input_fn)
-        print("eval result is {}: ".format(pred))
-        # compute_map(gt, pred, valid, average=None)
+        loss = eval_results['loss']
+        global_step = eval_results['global_step']
+        accuracy = eval_results['accuracy']
+        print("eval_results is {}: ".format(eval_results))
 
-        # train_writer.add_summary()
-        # Write summary
-        # summary_str = sess.run(summary, feed_dict={x: batch_xs, labels: batch_ys, lmbda: 5e-5, keep_prob: 0.5})
-        # summary_writerev.add_summary(summary_str, step)
+        # Prediction
+        pred_result = mnist_classifier.predict(input_fn=eval_input_fn)
+        print("pred_result is {} and shape {}: and type{} ".format(pred_result,np.shape(pred_result),type(pred_result)))
+
+        # Get mAp
+        mAp = eval.compute_map(eval_labels, pred_result, eval_labels, average=None)
+        summary = tf.Summary(value=[tf.Summary.Value(tag="mAP",simple_vale=mAp)])
+        train_writer.add_summary(summary)
         summary_writer.flush()
 
 

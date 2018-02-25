@@ -1,4 +1,4 @@
-:qfrom __future__ import absolute_import
+from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
@@ -66,21 +66,32 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     print('{}: {}'.format(np.shape(features), np.shape(labels)))
     input_layer = tf.reshape(features["x"], [-1, 256, 256, 3])
 
+    # filter1 = tf.random_normal(shape=[11,11,3,96])
+    # conv1 = tf.layers.conv2d(
+    #     inputs=input_layer,
+    #     filters=32,
+    #     kernel_size=[5, 5],
+    #     padding="same",
+    #     activation=tf.nn.relu)
     # Convolutional Layer #1
     conv1 = tf.layers.conv2d(
         inputs=input_layer,
         filters=96,
+        kernel_initializer=tf.Variable(tf.random_normal([11, 11, 3, 96])),
         kernel_size=[11, 11],
         strides=(4, 4),
         padding="valid",
         activation=tf.nn.relu)
+    # bias_layer_1 = tf.nn.bias_add(conv1, biases_1_array)
     # Pooling Layer #1
     pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[3, 3], strides=2)
+
 
     # Convolutional Layer #2 and Pooling Layer #2
     conv2 = tf.layers.conv2d(
         inputs=pool1,
-        filters=256,
+        # filters=256,
+        filters=tf.Variable(tf.random_normal([5, 5, 96, 256])),
         kernel_size=[5, 5],
         strides=(1, 1),
         padding="same",
@@ -90,7 +101,8 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     # Convolutional Layer #3 and Pooling Layer #3
     conv3 = tf.layers.conv2d(
         inputs=pool2,
-        filters=384,
+        # filters=384,
+        filters=tf.random_normal(shape=[3, 3, 256, 384]),
         kernel_size=[3, 3],
         strides=(1, 1),
         padding="same",
@@ -99,7 +111,8 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     # Convolutional Layer #4 and Pooling Layer #4
     conv4 = tf.layers.conv2d(
         inputs=conv3,
-        filters=256,
+        # filters=256,
+        filters=tf.random_normal(shape=[3, 3, 384, 384]),
         kernel_size=[3, 3],
         strides=(1, 1),
         padding="same",
@@ -108,17 +121,19 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     # Convolutional Layer #2 and Pooling Layer #2
     conv5 = tf.layers.conv2d(
         inputs=conv4,
-        filters=246,
+        # filters=256,
+        filters=tf.random_normal(shape=[3, 3, 384, 256]),
         kernel_size=[3, 3],
         strides=(1, 1),
         padding="same")
     pool5 = tf.layers.max_pooling2d(inputs=conv5, pool_size=[3, 3], strides=2)
 
     # Dense Layer
-    # pool5_shape = pool5.get_shape()
-    pool5_flat = tf.reshape(pool5, [-1, 6*6*246])
+    pool5_shape = pool5.get_shape()
+    print(".....................................")
+    print("pool5_shape is {}".format(np.shape(pool5_shape)))
 
-
+    pool5_flat = tf.reshape(pool5, [-1, 6*6*256])
 
     dense6 = tf.layers.dense(inputs=pool5_flat, units=4096,
                             activation=tf.nn.relu)
@@ -126,11 +141,11 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         inputs=dense6, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
 
 
-
     dense7 = tf.layers.dense(inputs=dropout6, units=4096,
                             activation=tf.nn.relu)
     dropout7 = tf.layers.dropout(
         inputs=dense7, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
+
     # Logits Layer
     logits = tf.layers.dense(inputs=dropout7, units=20)
 
@@ -142,7 +157,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         # Add `softmax_tensor` to the graph. It is used for PREDICT and by the
         # `logging_hook`.
         # "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
-        "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
+        "probabilities": tf.nn.sigmoid(logits, name="sigmoid_tensor")
     }
 
     if mode == tf.estimator.ModeKeys.PREDICT:
@@ -151,6 +166,9 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     # Calculate Loss (for both TRAIN and EVAL modes)
     # onehot_labels = tf.one_hot(indices=tf.cast(labels, tf.int32), depth=10)
+    print("--------------------------------------------------")
+    print("labels is {} and logits {}: and type".format(np.shape(labels), np.shape(logits)))
+
     loss = tf.identity(tf.losses.sigmoid_cross_entropy(multi_class_labels=labels,logits=logits))
 
     # Configure the Training Op (for TRAIN mode)
@@ -306,9 +324,7 @@ def parse_args():
     parser.add_argument(
         'data_dir', type=str, default='/home/teame-predict/Documents/ernie/ObjectClassification-tutorial',
         help='Path to PASCAL data storage')
-    print("-----------------------------------")
     if len(sys.argv) == 1:
-        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
         parser.print_help()
         sys.exit(1)
     args = parser.parse_args()

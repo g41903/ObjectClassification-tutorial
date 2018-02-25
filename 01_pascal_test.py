@@ -1,6 +1,6 @@
+from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
-from __future__ import print_function
 
 # Imports
 import sys
@@ -103,8 +103,8 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         "classes": tf.argmax(input=logits, axis=1),
         # Add `softmax_tensor` to the graph. It is used for PREDICT and by the
         # `logging_hook`.
+        "probabilities": tf.nn.sigmoid(logits, name="sigmoid_tensor")
         # "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
-        "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
     }
 
     if mode == tf.estimator.ModeKeys.PREDICT:
@@ -270,6 +270,7 @@ def parse_args():
         help='Path to PASCAL data storage')
     print("-----------------------------------")
     if len(sys.argv) == 1:
+        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
         parser.print_help()
         sys.exit(1)
     args = parser.parse_args()
@@ -334,37 +335,47 @@ def main():
     logging_hook = tf.train.LoggingTensorHook(
         tensors=tensors_to_log, every_n_iter=10)
     # Train the model
-    train_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": train_data, "w": train_weights},
-        y=train_labels,
-        batch_size=100,
-        num_epochs=None,
-        shuffle=True)
-    pascal_classifier.train(
-        input_fn=train_input_fn,
-        steps=3000,
-        hooks=[logging_hook])
-    # Evaluate the model and print results
-    eval_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": eval_data, "w": eval_weights},
-        y=eval_labels,
-        num_epochs=1,
-        shuffle=False)
-    pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
-    pred = np.stack([p['probabilities'] for p in pred])
-    rand_AP = compute_map(
-        eval_labels, np.random.random(eval_labels.shape),
-        eval_weights, average=None)
-    print('Random AP: {} mAP'.format(np.mean(rand_AP)))
-    gt_AP = compute_map(
-        eval_labels, eval_labels, eval_weights, average=None)
-    print('GT AP: {} mAP'.format(np.mean(gt_AP)))
-    AP = compute_map(eval_labels, pred, eval_weights, average=None)
-    print('Obtained {} mAP'.format(np.mean(AP)))
-    print('per class:')
-    for cid, cname in enumerate(CLASS_NAMES):
-        print('{}: {}'.format(cname, _get_el(AP, cid)))
+    init = tf.global_variables_initializer()
+    with tf.Session() as sess:
+        sess.run(init)
+        summary_writer = tf.summary.FileWriter('/tmp/pascal_model_scratch' + '/train',
+                                             sess.graph)
 
+        train_input_fn = tf.estimator.inputs.numpy_input_fn(
+            x={"x": train_data, "w": train_weights},
+            y=train_labels,
+            batch_size=50,
+            num_epochs=None,
+            shuffle=True)
+        pascal_classifier.train(
+            input_fn=train_input_fn,
+            steps=1000,
+            hooks=[logging_hook])
+        # Evaluate the model and print results
+        eval_input_fn = tf.estimator.inputs.numpy_input_fn(
+            x={"x": eval_data, "w": eval_weights},
+            y=eval_labels,
+            num_epochs=1,
+            shuffle=False)
+        pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
+        pred = np.stack([p['probabilities'] for p in pred])
+        rand_AP = compute_map(
+            eval_labels, np.random.random(eval_labels.shape),
+            eval_weights, average=None)
+        print('Random AP: {} mAP'.format(np.mean(rand_AP)))
+        gt_AP = compute_map(
+            eval_labels, eval_labels, eval_weights, average=None)
+        print('GT AP: {} mAP'.format(np.mean(gt_AP)))
+        AP = compute_map(eval_labels, pred, eval_weights, average=None)
+        print('Obtained {} mAP'.format(np.mean(AP)))
+        print('per class:')
+        for cid, cname in enumerate(CLASS_NAMES):
+            print('{}: {}'.format(cname, _get_el(AP, cid)))
+
+        summary = tf.Summary(value=[tf.Summary.Value(tag="mAP", simple_value=np.mean(AP))])
+        summary_writer.add_summary(summary)
+        summary_writer.flush()
 
 if __name__ == "__main__":
     main()
+
