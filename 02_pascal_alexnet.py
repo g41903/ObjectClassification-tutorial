@@ -115,20 +115,26 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     pool5 = tf.layers.max_pooling2d(inputs=conv5, pool_size=[3, 3], strides=2)
 
     # Dense Layer
-    pool5_shape = pool5.get_shape()
-    pool5_flat = tf.reshape(pool5, [-1, pool5_shape])
+    # pool5_shape = pool5.get_shape()
+    pool5_flat = tf.reshape(pool5, [-1, 6*6*246])
+
+
 
     dense6 = tf.layers.dense(inputs=pool5_flat, units=4096,
                             activation=tf.nn.relu)
     dropout6 = tf.layers.dropout(
         inputs=dense6, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
 
+
+
     dense7 = tf.layers.dense(inputs=dropout6, units=4096,
                             activation=tf.nn.relu)
-    dropout6 = tf.layers.dropout(
+    dropout7 = tf.layers.dropout(
         inputs=dense7, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
     # Logits Layer
-    logits = tf.layers.dense(inputs=dropout6, units=20)
+    logits = tf.layers.dense(inputs=dropout7, units=20)
+
+
 
     predictions = {
         # Generate predictions (for PREDICT and EVAL mode)
@@ -142,10 +148,9 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     if mode == tf.estimator.ModeKeys.PREDICT:
         return tf.estimator.EstimatorSpec(mode=mode, predictions=predictions)
 
+
     # Calculate Loss (for both TRAIN and EVAL modes)
     # onehot_labels = tf.one_hot(indices=tf.cast(labels, tf.int32), depth=10)
-    loss = tf.identity(tf.losses.softmax_cross_entropy(
-        onehot_labels=labels, logits=logits), name='loss')
     loss = tf.identity(tf.losses.sigmoid_cross_entropy(multi_class_labels=labels,logits=logits))
 
     # Configure the Training Op (for TRAIN mode)
