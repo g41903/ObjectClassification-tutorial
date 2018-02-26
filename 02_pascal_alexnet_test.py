@@ -48,7 +48,7 @@ CLASS_NAMES = [
     'train',
     'tvmonitor',
 ]
-docs_dir = os.path.expanduser('~/Documents/ernie')
+docs_dir = os.path.expanduser('./data')
 
 def save_obj(obj, name ):
     with open(docs_dir+'/'+ name + '.pkl', 'wb') as f:
@@ -62,8 +62,23 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     # Write this function
     """Model function for CNN."""
     # Input Layer
-    print('{}: {}'.format(np.shape(features), np.shape(labels)))
+    print('Feature shape {}: {}'.format(features, np.shape(labels)))
     input_layer = tf.reshape(features["x"], [-1, 256, 256, 3])
+    img_num = input_layer.get_shape().as_list()[0]
+    input_image_layer = []
+    if img_num is not None:
+        for img_idx in range(img_num):
+            image = input_layer[img_idx,:]
+            image = tf.random_crop(value = image, size = [227, 227, 3])
+            image = tf.image.flip_left_right(image)
+            image = tf.image.resize_image_with_crop_or_pad(image=image,target_height = 227, target_width = 227)
+            input_image_layer.append(image)
+
+        input_image_layer = tf.convert_to_tensor(input_image_layer, dtype=tf.float32)
+    else:
+        input_image_layer = input_layer
+        print('img_num shape {}: input_layer is {} '.format(img_num, np.shape(input_layer.get_shape().as_list())))
+        print("img_num is None")
 
     # filter1 = tf.random_normal(shape=[11,11,3,96])
     # conv1 = tf.layers.conv2d(
@@ -76,7 +91,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     # init = tf.initializers.random_normal()
     conv1 = tf.layers.conv2d(
-        inputs=input_layer,
+        inputs=input_image_layer,
         filters=96,
         kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),
         bias_initializer=tf.zeros_initializer(),
@@ -117,7 +132,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     # Convolutional Layer #4 and Pooling Layer #4
     conv4 = tf.layers.conv2d(
         inputs=conv3,
-        filters=256,
+        filters=384,
         #filters=tf.random_normal(shape=[3, 3, 384, 384]),
         kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),
         bias_initializer=tf.zeros_initializer(),
@@ -140,10 +155,11 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     # Dense Layer
     pool5_shape = pool5.get_shape()
-    print(".....................................")
-    print("pool5_shape is {}".format(np.shape(pool5_shape)))
-
-    pool5_flat = tf.reshape(pool5, [-1, 6*6*256])
+    # print(".....................................")
+    # print("pool5_shape is {}".format(np.shape(pool5_shape)))
+    pool5_list = pool5_shape.as_list()
+    pool5_product = np.int32(pool5_list[1]*pool5_list[2]*pool5_list[3])
+    pool5_flat = tf.reshape(pool5, [-1, pool5_product])
 
     dense6 = tf.layers.dense(inputs=pool5_flat, units=4096,activation=tf.nn.relu, kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),bias_initializer=tf.zeros_initializer(),)
     dropout6 = tf.layers.dropout(
@@ -362,24 +378,24 @@ def main():
     # outfile_eval_data = TemporaryFile()
     # outfile_eval_labels = TemporaryFile()
     # outfile_eval_weights = TemporaryFile()
-    data_dir = '/home/teame-predict/Documents/ernie/ObjectClassification-tutorial'
+    data_dir = './data'
+    '''
+    train_data, train_labels, train_weights = load_pascal(
+        data_dir, split='trainval')
+    eval_data, eval_labels, eval_weights = load_pascal(
+        data_dir, split='test')
 
-    # train_data, train_labels, train_weights = load_pascal(
-    #     data_dir, split='trainval')
-    # eval_data, eval_labels, eval_weights = load_pascal(
-    #     data_dir, split='test')
-    #
-    # # save files
-    # print("Save Fast load pascal data----------------")
-    #
-    # np.save(os.path.join(docs_dir, 'outfile_train_data'), train_data)
-    # np.save(os.path.join(docs_dir, 'outfile_train_labels'), train_labels)
-    # np.save(os.path.join(docs_dir, 'outfile_train_weights'), train_weights)
-    # np.save(os.path.join(docs_dir, 'outfile_eval_data'), eval_data)
-    # np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
-    # np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
-    # print("Finished Fast load pascal data----------------")
+    # save files
+    print("Save Fast load pascal data----------------")
 
+    np.save(os.path.join(docs_dir, 'outfile_train_data'), train_data)
+    np.save(os.path.join(docs_dir, 'outfile_train_labels'), train_labels)
+    np.save(os.path.join(docs_dir, 'outfile_train_weights'), train_weights)
+    np.save(os.path.join(docs_dir, 'outfile_eval_data'), eval_data)
+    np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
+    np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
+    print("Finished Fast load pascal data----------------")
+    '''
 
     print("Fast load pascal data----------------")
     train_data = np.load(os.path.join(docs_dir, 'outfile_train_data.npy'))
@@ -403,12 +419,12 @@ def main():
     train_input_fn = tf.estimator.inputs.numpy_input_fn(
         x={"x": train_data, "w": train_weights},
         y=train_labels,
-        batch_size=50,
+        batch_size=10,
         num_epochs=None,
         shuffle=True)
     pascal_classifier.train(
         input_fn=train_input_fn,
-        steps=1000,
+        steps=40000,
         hooks=[logging_hook])
     # Evaluate the model and print results
     eval_input_fn = tf.estimator.inputs.numpy_input_fn(
