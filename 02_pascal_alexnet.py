@@ -145,20 +145,18 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     pool5_flat = tf.reshape(pool5, [-1, 6*6*256])
 
-    dense6 = tf.layers.dense(inputs=pool5_flat, units=4096,
-                            activation=tf.nn.relu)
+    dense6 = tf.layers.dense(inputs=pool5_flat, units=4096,activation=tf.nn.relu, kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),bias_initializer=tf.zeros_initializer(),)
     dropout6 = tf.layers.dropout(
         inputs=dense6, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
 
 
-    dense7 = tf.layers.dense(inputs=dropout6, units=4096,
-                            activation=tf.nn.relu)
+    dense7 = tf.layers.dense(inputs=dropout6, units= 4096, activation=tf.nn.relu, kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),
+        bias_initializer=tf.zeros_initializer(),)
     dropout7 = tf.layers.dropout(
         inputs=dense7, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
 
     # Logits Layer
     logits = tf.layers.dense(inputs=dropout7, units=20)
-
 
 
     predictions = {
@@ -396,7 +394,7 @@ def main():
     pascal_classifier = tf.estimator.Estimator(
         model_fn=partial(cnn_model_fn,
                          num_classes=train_labels.shape[1]),
-        model_dir="./models/pascal_model_scratch")
+        model_dir="./models/pascal_model_scratch02")
 
     tensors_to_log = {"loss": "loss"}
     logging_hook = tf.train.LoggingTensorHook(
@@ -426,7 +424,7 @@ def main():
     print('02_Alexnet Random AP: {} mAP'.format(np.mean(rand_AP)))
     gt_AP = compute_map(
         eval_labels, eval_labels, eval_weights, average=None)
-    print('02_al02_Alexnetexnet GT AP: {} mAP'.format(np.mean(gt_AP)))
+    print('02_Alexnet GT AP: {} mAP'.format(np.mean(gt_AP)))
     AP = compute_map(eval_labels, pred, eval_weights, average=None)
     print('02_Alexnet Obtained {} mAP'.format(np.mean(AP)))
     print('02_Alexnet per class:')

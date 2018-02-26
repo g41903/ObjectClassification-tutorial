@@ -20,8 +20,8 @@
       <file leaf-file-name="00_mnist.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/00_mnist.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-832">
-              <caret line="41" column="49" lean-forward="false" selection-start-line="41" selection-start-column="45" selection-end-line="41" selection-end-column="49" />
+            <state relative-caret-position="213">
+              <caret line="118" column="47" lean-forward="false" selection-start-line="118" selection-start-column="45" selection-end-line="118" selection-end-column="47" />
               <folding>
                 <element signature="e#58#96#0" expanded="true" />
               </folding>
@@ -32,8 +32,8 @@
       <file leaf-file-name="00_mnist_test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/00_mnist_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="11">
+              <caret line="101" column="0" lean-forward="false" selection-start-line="101" selection-start-column="0" selection-end-line="104" selection-end-column="56" />
               <folding>
                 <element signature="e#58#96#0" expanded="true" />
               </folding>
@@ -44,8 +44,8 @@
       <file leaf-file-name="01_pascal.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/01_pascal.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="246" column="64" lean-forward="false" selection-start-line="246" selection-start-column="64" selection-end-line="246" selection-end-column="64" />
+            <state relative-caret-position="165">
+              <caret line="315" column="27" lean-forward="false" selection-start-line="315" selection-start-column="27" selection-end-line="315" selection-end-column="27" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -56,8 +56,8 @@
       <file leaf-file-name="01_pascal_test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/01_pascal_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="231" column="28" lean-forward="true" selection-start-line="231" selection-start-column="28" selection-end-line="231" selection-end-column="28" />
+            <state relative-caret-position="133">
+              <caret line="313" column="24" lean-forward="false" selection-start-line="313" selection-start-column="19" selection-end-line="313" selection-end-column="24" />
               <folding>
                 <element signature="e#0#37#0" expanded="true" />
               </folding>
@@ -68,8 +68,8 @@
       <file leaf-file-name="02_pascal_alexnet.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/02_pascal_alexnet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="330" column="64" lean-forward="false" selection-start-line="330" selection-start-column="64" selection-end-line="330" selection-end-column="64" />
+            <state relative-caret-position="192">
+              <caret line="412" column="38" lean-forward="false" selection-start-line="412" selection-start-column="37" selection-end-line="412" selection-end-column="38" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -80,8 +80,8 @@
       <file leaf-file-name="02_pascal_alexnet_test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/02_pascal_alexnet_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="330" column="64" lean-forward="false" selection-start-line="330" selection-start-column="64" selection-end-line="330" selection-end-column="64" />
+            <state relative-caret-position="194">
+              <caret line="400" column="48" lean-forward="false" selection-start-line="400" selection-start-column="48" selection-end-line="400" selection-end-column="48" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -92,8 +92,8 @@
       <file leaf-file-name="eval.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/eval.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+            <state relative-caret-position="-2">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -120,11 +120,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$</find>
-      <find>BATCH_SIZE</find>
-      <find>int</find>
-      <find>models</find>
-      <find>activa</find>
       <find>load_pascal</find>
       <find>estimator.Estimator</find>
       <find>load_pa</find>
@@ -138,14 +133,23 @@
       <find>classifier.tr</find>
       <find>conv2d</find>
       <find>momentu</find>
-      <find>dense</find>
-      <find>tmp</find>
       <find>model</find>
       <find>global_step</find>
       <find>classifier</find>
       <find>sigmoid</find>
-      <find>cnn_model_fn</find>
       <find>docs_dir</find>
+      <find>tmp</find>
+      <find>summa</find>
+      <find>evalu</find>
+      <find>loss</find>
+      <find>dense</find>
+      <find>weight</find>
+      <find>/tmp</find>
+      <find>./mod</find>
+      <find>./mo</find>
+      <find>summary</find>
+      <find>cnn_model_fn</find>
+      <find>sum</find>
     </findStrings>
     <replaceStrings>
       <replace>tf.random_normal_initializer(mean=0.0,stddev=0.01)</replace>
@@ -160,9 +164,10 @@
         <option value="$PROJECT_DIR$/00_mnist.py" />
         <option value="$PROJECT_DIR$/00_mnist_test.py" />
         <option value="$PROJECT_DIR$/01_pascal_test.py" />
+        <option value="$PROJECT_DIR$/eval.py" />
+        <option value="$PROJECT_DIR$/02_pascal_alexnet_test.py" />
         <option value="$PROJECT_DIR$/01_pascal.py" />
         <option value="$PROJECT_DIR$/02_pascal_alexnet.py" />
-        <option value="$PROJECT_DIR$/02_pascal_alexnet_test.py" />
       </list>
     </option>
   </component>
@@ -224,24 +229,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.01_pascal_test">
-    <configuration name="00_mnist" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="hw1" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/00_mnist.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
+  <component name="RunManager" selected="Python.02_pascal_alexnet">
     <configuration name="00_mnist_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -310,20 +298,37 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
+    <configuration name="02_pascal_alexnet_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="hw1" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/02_pascal_alexnet_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.00_mnist" />
-      <item index="1" class="java.lang.String" itemvalue="Python.01_pascal" />
-      <item index="2" class="java.lang.String" itemvalue="Python.02_pascal_alexnet" />
-      <item index="3" class="java.lang.String" itemvalue="Python.00_mnist_test" />
-      <item index="4" class="java.lang.String" itemvalue="Python.01_pascal_test" />
+      <item index="0" class="java.lang.String" itemvalue="Python.01_pascal" />
+      <item index="1" class="java.lang.String" itemvalue="Python.02_pascal_alexnet" />
+      <item index="2" class="java.lang.String" itemvalue="Python.00_mnist_test" />
+      <item index="3" class="java.lang.String" itemvalue="Python.01_pascal_test" />
+      <item index="4" class="java.lang.String" itemvalue="Python.02_pascal_alexnet_test" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.01_pascal_test" />
-        <item index="1" class="java.lang.String" itemvalue="Python.02_pascal_alexnet" />
-        <item index="2" class="java.lang.String" itemvalue="Python.00_mnist_test" />
-        <item index="3" class="java.lang.String" itemvalue="Python.01_pascal" />
-        <item index="4" class="java.lang.String" itemvalue="Python.00_mnist" />
+        <item index="0" class="java.lang.String" itemvalue="Python.02_pascal_alexnet" />
+        <item index="1" class="java.lang.String" itemvalue="Python.02_pascal_alexnet_test" />
+        <item index="2" class="java.lang.String" itemvalue="Python.01_pascal_test" />
+        <item index="3" class="java.lang.String" itemvalue="Python.00_mnist_test" />
+        <item index="4" class="java.lang.String" itemvalue="Python.01_pascal" />
       </list>
     </recent_temporary>
   </component>
@@ -356,7 +361,7 @@
     <frame x="65" y="-4" width="1535" height="904" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.322364" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15916723" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32797858" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -365,7 +370,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34672022" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31994644" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37419355" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2632258" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975152" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -382,11 +387,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/01_pascal_test.py</url>
-          <line>242</line>
-          <option name="timeStamp" value="58" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/01_pascal_test.py</url>
           <line>291</line>
@@ -490,36 +490,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/eval.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+        <state relative-caret-position="-2">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/00_mnist.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-832">
-          <caret line="41" column="49" lean-forward="false" selection-start-line="41" selection-start-column="45" selection-end-line="41" selection-end-column="49" />
-          <folding>
-            <element signature="e#58#96#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/00_mnist_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#58#96#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/01_pascal.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="246" column="64" lean-forward="false" selection-start-line="246" selection-start-column="64" selection-end-line="246" selection-end-column="64" />
+        <state relative-caret-position="165">
+          <caret line="315" column="27" lean-forward="false" selection-start-line="315" selection-start-column="27" selection-end-line="315" selection-end-column="27" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
@@ -528,8 +508,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/01_pascal_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="231" column="28" lean-forward="true" selection-start-line="231" selection-start-column="28" selection-end-line="231" selection-end-column="28" />
+        <state relative-caret-position="133">
+          <caret line="313" column="24" lean-forward="false" selection-start-line="313" selection-start-column="19" selection-end-line="313" selection-end-column="24" />
           <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>
@@ -538,18 +518,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/02_pascal_alexnet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="330" column="64" lean-forward="false" selection-start-line="330" selection-start-column="64" selection-end-line="330" selection-end-column="64" />
+        <state relative-caret-position="192">
+          <caret line="412" column="38" lean-forward="false" selection-start-line="412" selection-start-column="37" selection-end-line="412" selection-end-column="38" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/00_mnist.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="118" column="47" lean-forward="false" selection-start-line="118" selection-start-column="45" selection-end-line="118" selection-end-column="47" />
+          <folding>
+            <element signature="e#58#96#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/00_mnist_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11">
+          <caret line="101" column="0" lean-forward="false" selection-start-line="101" selection-start-column="0" selection-end-line="104" selection-end-column="56" />
+          <folding>
+            <element signature="e#58#96#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/02_pascal_alexnet_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="330" column="64" lean-forward="false" selection-start-line="330" selection-start-column="64" selection-end-line="330" selection-end-column="64" />
+        <state relative-caret-position="194">
+          <caret line="400" column="48" lean-forward="false" selection-start-line="400" selection-start-column="48" selection-end-line="400" selection-end-column="48" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
