@@ -62,16 +62,17 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     # Write this function
     """Model function for CNN."""
     # Input Layer
-    print('Feature shape {}: {}'.format(features, np.shape(labels)))
     input_layer = tf.reshape(features["x"], [-1, 256, 256, 3])
     img_num = input_layer.get_shape().as_list()[0]
-    input_image_layer = []
+    input_image_layer = input_layer
+
+    '''
     if img_num is not None:
         for img_idx in range(img_num):
             image = input_layer[img_idx,:]
-            image = tf.random_crop(value = image, size = [227, 227, 3])
+            image = tf.random_crop(value = image, size = [224, 224, 3])
             image = tf.image.flip_left_right(image)
-            image = tf.image.resize_image_with_crop_or_pad(image=image,target_height = 227, target_width = 227)
+            image = tf.image.resize_image_with_crop_or_pad(image=image,target_height = 224, target_width = 224)
             input_image_layer.append(image)
 
         input_image_layer = tf.convert_to_tensor(input_image_layer, dtype=tf.float32)
@@ -79,84 +80,127 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         input_image_layer = input_layer
         print('img_num shape {}: input_layer is {} '.format(img_num, np.shape(input_layer.get_shape().as_list())))
         print("img_num is None")
+    '''
 
-    # filter1 = tf.random_normal(shape=[11,11,3,96])
-    # conv1 = tf.layers.conv2d(
-    #     inputs=input_layer,
-    #     filters=32,
-    #     kernel_size=[5, 5],
-    #     padding="same",
-    #     activation=tf.nn.relu)
     # Convolutional Layer #1
-
     # init = tf.initializers.random_normal()
-    conv1 = tf.layers.conv2d(
+    # pad = 1
+    conv1_1 = tf.layers.conv2d(
         inputs=input_image_layer,
-        filters=96,
-        kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),
-        bias_initializer=tf.zeros_initializer(),
-        kernel_size=[11, 11],
-        strides=(4, 4),
-        padding="valid",
+        filters=64,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
         activation=tf.nn.relu)
-    # bias_layer_1 = tf.nn.bias_add(conv1, biases_1_array)
-    # Pooling Layer #1
-    pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[3, 3], strides=2)
+
+    # pad = 1
+    conv1_2 = tf.layers.conv2d(
+        inputs=conv1_1,
+        filters=64,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+    pool1 = tf.layers.max_pooling2d(inputs=conv1_2, pool_size=[2, 2], strides=2)
 
 
-    # Convolutional Layer #2 and Pooling Layer #2
-    conv2 = tf.layers.conv2d(
+    conv2_1 = tf.layers.conv2d(
         inputs=pool1,
+        filters=128,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+
+
+    conv2_2 = tf.layers.conv2d(
+        inputs= conv2_1,
+        filters=128,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+    pool2 = tf.layers.max_pooling2d(inputs=conv2_2, pool_size=[2, 2], strides=2)
+
+    conv3_1 = tf.layers.conv2d(
+        inputs= pool2,
         filters=256,
-        #filters=tf.Variable(tf.random_normal([5, 5, 96, 256])),
-        kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),
-        bias_initializer=tf.zeros_initializer(),
-        kernel_size=[5, 5],
-        strides=(1, 1),
-        padding="same",
-        activation=tf.nn.relu)
-    pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[3, 3], strides=2)
-
-    # Convolutional Layer #3 and Pooling Layer #3
-    conv3 = tf.layers.conv2d(
-        inputs=pool2,
-        filters=384,
-        #filters=tf.random_normal(shape=[3, 3, 256, 384]),
-        kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),
-        bias_initializer=tf.zeros_initializer(),
         kernel_size=[3, 3],
         strides=(1, 1),
         padding="same",
         activation=tf.nn.relu)
 
-    # Convolutional Layer #4 and Pooling Layer #4
-    conv4 = tf.layers.conv2d(
-        inputs=conv3,
-        filters=384,
-        #filters=tf.random_normal(shape=[3, 3, 384, 384]),
-        kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),
-        bias_initializer=tf.zeros_initializer(),
-        kernel_size=[3, 3],
-        strides=(1, 1),
-        padding="same",
-        activation=tf.nn.relu)
-
-    # Convolutional Layer #2 and Pooling Layer #2
-    conv5 = tf.layers.conv2d(
-        inputs=conv4,
+    conv3_2 = tf.layers.conv2d(
+        inputs= conv3_1,
         filters=256,
-        #filters=tf.random_normal(shape=[3, 3, 384, 256]),
-        kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),
-        bias_initializer=tf.zeros_initializer(),
         kernel_size=[3, 3],
         strides=(1, 1),
-        padding="same")
-    pool5 = tf.layers.max_pooling2d(inputs=conv5, pool_size=[3, 3], strides=2)
+        padding="same",
+        activation=tf.nn.relu)
+
+    conv3_3 = tf.layers.conv2d(
+        inputs= conv3_2,
+        filters=256,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+    pool3 = tf.layers.max_pooling2d(inputs=conv3_3, pool_size=[2, 2], strides=2)
+
+
+    conv4_1 = tf.layers.conv2d(
+        inputs= pool3,
+        filters=512,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+
+    conv4_2 = tf.layers.conv2d(
+        inputs= conv4_1,
+        filters=512,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+
+    conv4_3 = tf.layers.conv2d(
+        inputs= conv4_2,
+        filters=512,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+    pool4 = tf.layers.max_pooling2d(inputs=conv4_3, pool_size=[2, 2], strides=2)
+
+    conv5_1 = tf.layers.conv2d(
+        inputs= pool4,
+        filters=512,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+
+    conv5_2 = tf.layers.conv2d(
+        inputs= conv5_1,
+        filters=512,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+
+    conv5_3 = tf.layers.conv2d(
+        inputs= conv5_2,
+        filters=512,
+        kernel_size=[3, 3],
+        strides=(1, 1),
+        padding="same",
+        activation=tf.nn.relu)
+
+    pool5 = tf.layers.max_pooling2d(inputs=conv5_3, pool_size=[2, 2], strides=2)
 
     # Dense Layer
     pool5_shape = pool5.get_shape()
-    # print(".....................................")
-    # print("pool5_shape is {}".format(np.shape(pool5_shape)))
     pool5_list = pool5_shape.as_list()
     pool5_product = np.int32(pool5_list[1]*pool5_list[2]*pool5_list[3])
     pool5_flat = tf.reshape(pool5, [-1, pool5_product])
@@ -189,29 +233,22 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
 
     # Calculate Loss (for both TRAIN and EVAL modes)
-    # onehot_labels = tf.one_hot(indices=tf.cast(labels, tf.int32), depth=10)
-    print("--------------------------------------------------")
-    print("labels is {} and logits {}: and type".format(np.shape(labels), np.shape(logits)))
 
     loss = tf.identity(tf.losses.sigmoid_cross_entropy(multi_class_labels=labels,logits=logits))
-    '''
-    global_step = tf.Variable(0, trainable=False)
-    starter_learning_rate = 0.1
-    learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
-                                               100000, 0.96, staircase=True)
-    # Passing global_step to minimize() will increment it at each step.
-    learning_step = (
-        tf.train.GradientDescentOptimizer(learning_rate)
-            .minimize(...
-    my
-    loss..., global_step = global_step)
-    )
-    '''
 
     # Configure the Training Op (for TRAIN mode)
     if mode == tf.estimator.ModeKeys.TRAIN:
         # optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
         # global_step = tf.Variable(0, trainable=False)
+        grad_input = tf.gradients(loss,input_layer)
+        grad_conv1_1 = tf.gradients(loss, conv1_1)
+        grad_conv2_1 = tf.gradients(loss, conv2_1)
+        grad_conv3_1 = tf.gradients(loss, conv3_1)
+        grad_conv4_1 = tf.gradients(loss, conv4_1)
+        grad_conv5_1 = tf.gradients(loss, conv5_1)
+        grad_dense6 = tf.gradients(loss, dense6)
+        grad_dense7 = tf.gradients(loss, dense7)
+
         starter_learning_rate = 0.001
         global_step = tf.train.get_global_step()
         learning_rate = tf.train.exponential_decay(learning_rate= starter_learning_rate, global_step = global_step,
@@ -220,8 +257,28 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         train_op = optimizer.minimize(
             loss=loss,
             global_step=tf.train.get_global_step())
+        #tf.summary()
+        # print("Training")
+        tf.summary.scalar(name= 'train_loss', tensor = loss )
+        tf.summary.scalar(name= 'learning rate', tensor = learning_rate)
+        tf.summary.histogram(name='grad_dense7', values=grad_input)
+        tf.summary.histogram(name='grad_conv1_1', values= grad_conv1_1)
+        tf.summary.histogram(name='grad_conv2_1', values=grad_conv2_1)
+        tf.summary.histogram(name='grad_conv3_1', values=grad_conv3_1)
+        tf.summary.histogram(name='grad_conv4_1', values=grad_conv4_1)
+        tf.summary.histogram(name='grad_conv5_1', values=grad_conv5_1)
+        tf.summary.histogram(name='grad_dense6', values=grad_dense6)
+        tf.summary.histogram(name='grad_dense7', values=grad_dense7)
+
+        tf.summary.image(name='image', tensor= input_layer)
+
+        summary_hook = tf.train.SummarySaverHook(
+            10,
+            output_dir='./models/03_VGG_Test',
+            summary_op=tf.summary.merge_all())
+
         return tf.estimator.EstimatorSpec(
-            mode=mode, loss=loss, train_op=train_op)
+            mode=mode, loss=loss, train_op=train_op, training_hooks = [summary_hook])
 
     # Add evaluation metrics (for EVAL mode)
     eval_metric_ops = {
@@ -229,7 +286,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
             labels=labels, predictions=predictions["classes"])}
     return tf.estimator.EstimatorSpec(
         mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
-
 
 
 def load_pascal(data_dir, split='train'):
@@ -407,46 +463,60 @@ def main():
     print('train_data {}: train_labels{} train_weights{}'.format(np.shape(train_data), np.shape(train_labels),np.shape(train_weights)))
     print("Finish load pascal data----------------")
 
-    pascal_classifier = tf.estimator.Estimator(
-        model_fn=partial(cnn_model_fn,
-                         num_classes=train_labels.shape[1]),
-        model_dir="./models/pascal_model_scratch02")
+    init = tf.global_variables_initializer()
+    with tf.Session() as sess:
+        sess.run(init)
+        train_writer = tf.summary.FileWriter('./models/03_VFF_Test_mAp',
+                                             sess.graph)
 
-    tensors_to_log = {"loss": "loss"}
-    logging_hook = tf.train.LoggingTensorHook(
-        tensors=tensors_to_log, every_n_iter=10)
-    # Train the model
-    train_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": train_data, "w": train_weights},
-        y=train_labels,
-        batch_size=10,
-        num_epochs=None,
-        shuffle=True)
-    pascal_classifier.train(
-        input_fn=train_input_fn,
-        steps=40000,
-        hooks=[logging_hook])
-    # Evaluate the model and print results
-    eval_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": eval_data, "w": eval_weights},
-        y=eval_labels,
-        num_epochs=1,
-        shuffle=False)
-    pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
-    pred = np.stack([p['probabilities'] for p in pred])
-    rand_AP = compute_map(
-        eval_labels, np.random.random(eval_labels.shape),
-        eval_weights, average=None)
-    print('02_Alexnet Random AP: {} mAP'.format(np.mean(rand_AP)))
-    gt_AP = compute_map(
-        eval_labels, eval_labels, eval_weights, average=None)
-    print('02_Alexnet GT AP: {} mAP'.format(np.mean(gt_AP)))
-    AP = compute_map(eval_labels, pred, eval_weights, average=None)
-    print('02_Alexnet Obtained {} mAP'.format(np.mean(AP)))
-    print('02_Alexnet per class:')
-    for cid, cname in enumerate(CLASS_NAMES):
-        print('{}: {}'.format(cname, _get_el(AP, cid)))
+        pascal_classifier = tf.estimator.Estimator(
+            model_fn=partial(cnn_model_fn,
+                             num_classes=train_labels.shape[1]),
+            model_dir="./models/pascal_model_scratch03-2")
 
+        tensors_to_log = {"loss": "loss"}
+        logging_hook = tf.train.LoggingTensorHook(
+            tensors=tensors_to_log, every_n_iter=10)
+        # Train the model
+
+
+        train_input_fn = tf.estimator.inputs.numpy_input_fn(
+            x={"x": train_data, "w": train_weights},
+            y=train_labels,
+            batch_size=10,
+            num_epochs=None,
+            shuffle=False)
+        pascal_classifier.train(
+            input_fn=train_input_fn,
+            steps=50,
+            hooks=[logging_hook])
+        # Evaluate the model and print results
+        eval_input_fn = tf.estimator.inputs.numpy_input_fn(
+            x={"x": eval_data, "w": eval_weights},
+            y=eval_labels,
+            batch_size=12,
+            num_epochs=1,
+            shuffle=False)
+
+        pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
+        pred = np.stack([p['probabilities'] for p in pred])
+        rand_AP = compute_map(
+            eval_labels, np.random.random(eval_labels.shape),
+            eval_weights, average=None)
+        print('03_VGG Random AP: {} mAP'.format(np.mean(rand_AP)))
+        gt_AP = compute_map(
+            eval_labels, eval_labels, eval_weights, average=None)
+        print('03_VGG GT AP: {} mAP'.format(np.mean(gt_AP)))
+        AP = compute_map(eval_labels, pred, eval_weights, average=None)
+        print('03_VGG Obtained {} mAP'.format(np.mean(AP)))
+        print('03_VGG per class:')
+        for cid, cname in enumerate(CLASS_NAMES):
+            print('{}: {}'.format(cname, _get_el(AP, cid)))
+
+        mAp = np.mean(AP)
+        summary = tf.Summary(value=[tf.Summary.Value(tag="mAP",simple_value=mAp)])
+        train_writer.add_summary(summary)
+        train_writer.flush()
 
 if __name__ == "__main__":
     main()

@@ -189,24 +189,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
 
     # Calculate Loss (for both TRAIN and EVAL modes)
-    # onehot_labels = tf.one_hot(indices=tf.cast(labels, tf.int32), depth=10)
-    print("--------------------------------------------------")
-    print("labels is {} and logits {}: and type".format(np.shape(labels), np.shape(logits)))
-
     loss = tf.identity(tf.losses.sigmoid_cross_entropy(multi_class_labels=labels,logits=logits))
-    '''
-    global_step = tf.Variable(0, trainable=False)
-    starter_learning_rate = 0.1
-    learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
-                                               100000, 0.96, staircase=True)
-    # Passing global_step to minimize() will increment it at each step.
-    learning_step = (
-        tf.train.GradientDescentOptimizer(learning_rate)
-            .minimize(...
-    my
-    loss..., global_step = global_step)
-    )
-    '''
 
     # Configure the Training Op (for TRAIN mode)
     if mode == tf.estimator.ModeKeys.TRAIN:
@@ -224,11 +207,16 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
             mode=mode, loss=loss, train_op=train_op)
 
     # Add evaluation metrics (for EVAL mode)
+    accuracy  = tf.metrics.accuracy(
+        labels=labels, predictions=predictions["classes"])
+
     eval_metric_ops = {
-        "accuracy": tf.metrics.accuracy(
-            labels=labels, predictions=predictions["classes"])}
-    return tf.estimator.EstimatorSpec(
-        mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
+        "accuracy": accuracy}
+
+    if mode == tf.estimator.ModeKeys.EVAL:
+        tf.summary.scalar('accuracy', accuracy[1])
+        return tf.estimator.EstimatorSpec(
+            mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
 
 
 
@@ -410,7 +398,7 @@ def main():
     pascal_classifier = tf.estimator.Estimator(
         model_fn=partial(cnn_model_fn,
                          num_classes=train_labels.shape[1]),
-        model_dir="./models/pascal_model_scratch02")
+        model_dir="./models/pascal_model_scratch02-test")
 
     tensors_to_log = {"loss": "loss"}
     logging_hook = tf.train.LoggingTensorHook(
@@ -424,7 +412,7 @@ def main():
         shuffle=True)
     pascal_classifier.train(
         input_fn=train_input_fn,
-        steps=40000,
+        steps=100,
         hooks=[logging_hook])
     # Evaluate the model and print results
     eval_input_fn = tf.estimator.inputs.numpy_input_fn(

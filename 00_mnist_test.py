@@ -138,7 +138,7 @@ def main(unused_argv):
         mAp = eval.compute_map(eval_labels, pred_result, eval_labels, average=None)
         summary = tf.Summary(value=[tf.Summary.Value(tag="mAP",simple_vale=mAp)])
         train_writer.add_summary(summary)
-        summary_writer.flush()
+        tf.summary_writer.flush()
 
 
 
