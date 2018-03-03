@@ -5,3 +5,8 @@ VOCtrainval_06-Nov-2007.tar
 .idea/misc.xml
 .idea/workspace.xml
 /models
+/writeup
+/.idea
+/others
+/MNIST-data
+/data

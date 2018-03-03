@@ -85,6 +85,8 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     # Convolutional Layer #1
     # init = tf.initializers.random_normal()
     # pad = 1
+
+    # conv2d_2d
     conv1_1 = tf.layers.conv2d(
         inputs=input_image_layer,
         filters=64,
@@ -94,6 +96,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         activation=tf.nn.relu)
 
     # pad = 1
+    # conv2d_2
     conv1_2 = tf.layers.conv2d(
         inputs=conv1_1,
         filters=64,
@@ -101,9 +104,11 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         strides=(1, 1),
         padding="same",
         activation=tf.nn.relu)
+
+    # max_pooling2d
     pool1 = tf.layers.max_pooling2d(inputs=conv1_2, pool_size=[2, 2], strides=2)
 
-
+    # conv2d_3
     conv2_1 = tf.layers.conv2d(
         inputs=pool1,
         filters=128,
@@ -112,7 +117,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         padding="same",
         activation=tf.nn.relu)
 
-
+    # conv2d_4
     conv2_2 = tf.layers.conv2d(
         inputs= conv2_1,
         filters=128,
@@ -120,8 +125,11 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         strides=(1, 1),
         padding="same",
         activation=tf.nn.relu)
+
+    # max_pooling2d_2
     pool2 = tf.layers.max_pooling2d(inputs=conv2_2, pool_size=[2, 2], strides=2)
 
+    # conv2d_5
     conv3_1 = tf.layers.conv2d(
         inputs= pool2,
         filters=256,
@@ -130,6 +138,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         padding="same",
         activation=tf.nn.relu)
 
+    # conv2d_6
     conv3_2 = tf.layers.conv2d(
         inputs= conv3_1,
         filters=256,
@@ -138,6 +147,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         padding="same",
         activation=tf.nn.relu)
 
+    # conv2d_7
     conv3_3 = tf.layers.conv2d(
         inputs= conv3_2,
         filters=256,
@@ -145,9 +155,11 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         strides=(1, 1),
         padding="same",
         activation=tf.nn.relu)
+
+    # max_pooling2d_3
     pool3 = tf.layers.max_pooling2d(inputs=conv3_3, pool_size=[2, 2], strides=2)
 
-
+    # conv2d_8
     conv4_1 = tf.layers.conv2d(
         inputs= pool3,
         filters=512,
@@ -156,6 +168,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         padding="same",
         activation=tf.nn.relu)
 
+    # conv2d_9
     conv4_2 = tf.layers.conv2d(
         inputs= conv4_1,
         filters=512,
@@ -164,6 +177,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         padding="same",
         activation=tf.nn.relu)
 
+    # conv2d_10
     conv4_3 = tf.layers.conv2d(
         inputs= conv4_2,
         filters=512,
@@ -171,8 +185,12 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         strides=(1, 1),
         padding="same",
         activation=tf.nn.relu)
+
+    # max_pooling2d_4
     pool4 = tf.layers.max_pooling2d(inputs=conv4_3, pool_size=[2, 2], strides=2)
 
+
+    # conv2s_11
     conv5_1 = tf.layers.conv2d(
         inputs= pool4,
         filters=512,
@@ -181,6 +199,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         padding="same",
         activation=tf.nn.relu)
 
+    # conv2d_12
     conv5_2 = tf.layers.conv2d(
         inputs= conv5_1,
         filters=512,
@@ -189,6 +208,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         padding="same",
         activation=tf.nn.relu)
 
+    # conv2d_13
     conv5_3 = tf.layers.conv2d(
         inputs= conv5_2,
         filters=512,
@@ -197,6 +217,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         padding="same",
         activation=tf.nn.relu)
 
+    # max_pooling2d_5
     pool5 = tf.layers.max_pooling2d(inputs=conv5_3, pool_size=[2, 2], strides=2)
 
     # Dense Layer
@@ -205,17 +226,23 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     pool5_product = np.int32(pool5_list[1]*pool5_list[2]*pool5_list[3])
     pool5_flat = tf.reshape(pool5, [-1, pool5_product])
 
+    # dense
     dense6 = tf.layers.dense(inputs=pool5_flat, units=4096,activation=tf.nn.relu, kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),bias_initializer=tf.zeros_initializer(),)
+
+    # dropout
     dropout6 = tf.layers.dropout(
         inputs=dense6, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
 
-
+    # dense_2
     dense7 = tf.layers.dense(inputs=dropout6, units= 4096, activation=tf.nn.relu, kernel_initializer=tf.random_normal_initializer(mean=0.0,stddev=0.01),
         bias_initializer=tf.zeros_initializer(),)
+
+    # dropout_2
     dropout7 = tf.layers.dropout(
         inputs=dense7, rate=0.5, training=mode == tf.estimator.ModeKeys.TRAIN)
 
     # Logits Layer
+    # dense_3
     logits = tf.layers.dense(inputs=dropout7, units=20)
 
 
@@ -466,56 +493,57 @@ def main():
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
         sess.run(init)
-        train_writer = tf.summary.FileWriter('./models/03_VFF_Test_mAp',
+        train_writer = tf.summary.FileWriter('./models/03_VGG_Test_mAp',
                                              sess.graph)
 
         pascal_classifier = tf.estimator.Estimator(
             model_fn=partial(cnn_model_fn,
                              num_classes=train_labels.shape[1]),
-            model_dir="./models/pascal_model_scratch03-2")
+            model_dir="./models/03_VGG_Test_Train")
 
         tensors_to_log = {"loss": "loss"}
         logging_hook = tf.train.LoggingTensorHook(
             tensors=tensors_to_log, every_n_iter=10)
         # Train the model
 
+        for iteration in range(100):
+            train_input_fn = tf.estimator.inputs.numpy_input_fn(
+                x={"x": train_data, "w": train_weights},
+                y=train_labels,
+                batch_size=10,
+                num_epochs=None,
+                shuffle=False)
+            pascal_classifier.train(
+                input_fn=train_input_fn,
+                steps=400,
+                hooks=[logging_hook])
 
-        train_input_fn = tf.estimator.inputs.numpy_input_fn(
-            x={"x": train_data, "w": train_weights},
-            y=train_labels,
-            batch_size=10,
-            num_epochs=None,
-            shuffle=False)
-        pascal_classifier.train(
-            input_fn=train_input_fn,
-            steps=50,
-            hooks=[logging_hook])
-        # Evaluate the model and print results
-        eval_input_fn = tf.estimator.inputs.numpy_input_fn(
-            x={"x": eval_data, "w": eval_weights},
-            y=eval_labels,
-            batch_size=12,
-            num_epochs=1,
-            shuffle=False)
+            # Evaluate the model and print results
+            eval_input_fn = tf.estimator.inputs.numpy_input_fn(
+                x={"x": eval_data, "w": eval_weights},
+                y=eval_labels,
+                batch_size=36,
+                num_epochs=1,
+                shuffle=False)
 
-        pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
-        pred = np.stack([p['probabilities'] for p in pred])
-        rand_AP = compute_map(
-            eval_labels, np.random.random(eval_labels.shape),
-            eval_weights, average=None)
-        print('03_VGG Random AP: {} mAP'.format(np.mean(rand_AP)))
-        gt_AP = compute_map(
-            eval_labels, eval_labels, eval_weights, average=None)
-        print('03_VGG GT AP: {} mAP'.format(np.mean(gt_AP)))
-        AP = compute_map(eval_labels, pred, eval_weights, average=None)
-        print('03_VGG Obtained {} mAP'.format(np.mean(AP)))
-        print('03_VGG per class:')
-        for cid, cname in enumerate(CLASS_NAMES):
-            print('{}: {}'.format(cname, _get_el(AP, cid)))
+            pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
+            pred = np.stack([p['probabilities'] for p in pred])
+            #rand_AP = compute_map(
+            #    eval_labels, np.random.random(eval_labels.shape),
+            #    eval_weights, average=None)
+            #print('03_VGG Random AP: {} mAP'.format(np.mean(rand_AP)))
+            #gt_AP = compute_map(
+            #    eval_labels, eval_labels, eval_weights, average=None)
+            #print('03_VGG GT AP: {} mAP'.format(np.mean(gt_AP)))
+            AP = compute_map(eval_labels, pred, eval_weights, average=None)
+            print('03_VGG Obtained {} mAP'.format(np.mean(AP)))
+            #print('03_VGG per class:')
+            #for cid, cname in enumerate(CLASS_NAMES):
+            #    print('{}: {}'.format(cname, _get_el(AP, cid)))
 
-        mAp = np.mean(AP)
-        summary = tf.Summary(value=[tf.Summary.Value(tag="mAP",simple_value=mAp)])
-        train_writer.add_summary(summary)
+            mAp = np.mean(AP)
+            summary = tf.Summary(value=[tf.Summary.Value(tag="mAP",simple_value=mAp)])
+            train_writer.add_summary(summary)
         train_writer.flush()
 
 if __name__ == "__main__":
