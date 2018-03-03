@@ -7,11 +7,13 @@ from __future__ import print_function
 # Impor
 import numpy as np
 import tensorflow as tf
+from eval import compute_map
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
 
 def cnn_model_fn(features, labels, mode):
+
     """Model function for CNN."""
     # Input Layer
     input_layer = tf.reshape(features["x"], [-1, 28, 28, 1])
@@ -68,8 +70,15 @@ def cnn_model_fn(features, labels, mode):
         train_op = optimizer.minimize(
             loss=loss,
             global_step=tf.train.get_global_step())
+
+        tf.summary.scalar(name= 'training_loss', tensor = loss )
+        summary_hook = tf.train.SummarySaverHook(
+            100,
+            output_dir='./models/01_mnist_0303_Train',
+            summary_op=tf.summary.merge_all())
+
         return tf.estimator.EstimatorSpec(
-            mode=mode, loss=loss, train_op=train_op)
+            mode=mode, loss=loss, train_op=train_op, training_hooks= [summary_hook])
 
     # Add evaluation metrics (for EVAL mode)
     eval_metric_ops = {
@@ -89,38 +98,58 @@ def main(unused_argv):
     eval_labels = np.asarray(mnist.test.labels, dtype=np.int32)
     # Create the Estimator
     mnist_classifier = tf.estimator.Estimator(
-        model_fn=cnn_model_fn, model_dir="/tmp/mnist_convnet_model")
+        model_fn=cnn_model_fn, model_dir="./models/01_mnist_0303_Test")
     tensors_to_log = {"loss": "loss"}
     logging_hook = tf.train.LoggingTensorHook(
         tensors=tensors_to_log, every_n_iter=500)
-    # Train the model
-    train_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": train_data},
-        y=train_labels,
-        batch_size=100,
-        num_epochs=None,
-        shuffle=True)
 
+    # Train the model
 
 
     print("train_input_fn ------------------> mnist_classifier.train")
-    for iteration in range(20):
-        mnist_classifier.train(
-            input_fn=train_input_fn,
-            steps=10,
-            hooks=[logging_hook])
-        print("#####################################")
-        if iteration%10==0:
+
+    init = tf.global_variables_initializer()
+    with tf.Session() as sess:
+        sess.run(init)
+        train_writer = tf.summary.FileWriter('./models/01_mnist_0303__mAp',
+                                             sess.graph)
+        for iteration in range(20):
+            step_size = 100
+            train_input_fn = tf.estimator.inputs.numpy_input_fn(
+                x={"x": train_data},
+                y=train_labels,
+                batch_size=100,
+                num_epochs=None,
+                shuffle=True)
+
+            mnist_classifier.train(
+                input_fn=train_input_fn,
+                steps=step_size,
+                hooks=[logging_hook])
+
             eval_input_fn = tf.estimator.inputs.numpy_input_fn(
                 x={"x": eval_data},
                 y=eval_labels,
                 num_epochs=1,
                 shuffle=False)
+
             # Evaluate the model and print results
             eval_results = mnist_classifier.evaluate(input_fn=eval_input_fn)
-            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+            accuracy = eval_results['accuracy']
+            print("accuracy is {} ".format(accuracy))
+            # pred = list(mnist_classifier.predict(input_fn=eval_input_fn))
+            # pred = np.stack([p['probabilities'] for p in pred])
+            # eval_weights = np.ones(eval_labels.shape[0])
+            # AP = compute_map(eval_labels, pred, eval_weights, average=None)
+            # print('01 Mnist Obtained {} mAP'.format(np.mean(AP)))
+            # # print('02_Alexnet per class:')
+            # # for cid, cname in enumerate(CLASS_NAMES):
+            # #     print('{}: {}'.format(cname, _get_el(AP, cid)))
+            # mAp = np.mean(AP)
+            summary = tf.Summary(value=[tf.Summary.Value(tag="mAP", simple_value=accuracy)])
+            train_writer.add_summary(summary, iteration*step_size)
 
-    print("mnist_classifier.train ------------------> eval_input_fn")
+        print("mnist_classifier.train ------------------> eval_input_fn")
 
 
 

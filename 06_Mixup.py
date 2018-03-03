@@ -8,19 +8,23 @@ import numpy as np
 import tensorflow as tf
 import argparse
 import glob, os
+import os.path as osp
+from PIL import Image
 from functools import partial
 from eval import compute_map
+from PIL import Image
 
 # extra
 from tempfile import TemporaryFile
 import pickle
+import scipy.misc
+import cv2
+import random
+from random import shuffle
+from sklearn.neighbors import NearestNeighbors
 
+docs_dir = os.path.expanduser('./data')
 
-
-# import models
-
-# Run the code, type the command in the terminal
-# python 01_pascal.py /home/teame-predict/Documents/ernie/ObjectClassification-tutorial
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -46,15 +50,6 @@ CLASS_NAMES = [
     'train',
     'tvmonitor',
 ]
-docs_dir = os.path.expanduser('./data')
-
-def save_obj(obj, name ):
-    with open(docs_dir+'/'+ name + '.pkl', 'wb') as f:
-        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
-
-def load_obj(name):
-    with open(docs_dir+'/' + name + '.pkl', 'rb') as f:
-        return pickle.load(f)
 
 def cnn_model_fn(features, labels, mode, num_classes=20):
     # Write this function
@@ -75,7 +70,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         input_image_layer = tf.convert_to_tensor(input_image_layer, dtype=tf.float32)
     else:
         input_image_layer = input_layer
-        # print('img_num shape {}: input_layer is {} '.format(img_num, np.shape(input_layer.get_shape().as_list())))
+        print('img_num shape {}: input_layer is {} '.format(img_num, np.shape(input_layer.get_shape().as_list())))
         print("img_num is None")
 
     # filter1 = tf.random_normal(shape=[11,11,3,96])
@@ -209,7 +204,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
         summary_hook = tf.train.SummarySaverHook(
             1000,
-            output_dir='./models/05_Pascal_AlexNet_0303_Train',
+            output_dir='./models/06_Mixup_0303_2_Train',
             summary_op=tf.summary.merge_all())
 
         return tf.estimator.EstimatorSpec(
@@ -229,171 +224,123 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
 
 
-def load_pascal(data_dir, split='train'):
-    """
-    Function to read images from PASCAL data folder.
-    Args:
-        data_dir (str): Path to the VOC2007 directory.
-        split (str): train/val/trainval split to use.
-    Returns:
-        images (np.ndarray): Return a np.float32 array of
-            shape (N, H, W, 3), where H, W are 224px each,
-            and each image is in RGB format.
-        labels (np.ndarray): An array of shape (N, 20) of
-            type np.int32, with 0s and 1s; 1s for classes that
-            are active in that image.
-        weights: (np.ndarray): An array of shape (N, 20) of
-            type np.int32, with 0s and 1s; 1s for classes that
-            are confidently labeled and 0s for classes that
-            are ambiguous.
-    """
-    # Wrote this function
-    # idx = 0
-    # if idx >20:
-    #     idx+=1
-    #     break
-    """
-    print("Begin Load Images ------------------------------------")
-    images = []
-    # images_dict -> key: img_file_idx, value: rgb image ndarray (256*256*3)
-    images_dict = {}
-    # count
-    for infile in glob.glob("./VOCdevkit/VOC2007/JPEGImages/*.jpg"):
-        # reshape the images to 256*256*3
-        file, ext = os.path.splitext(infile)
-        file_idx = file[-6:]
-
-        try:
-            im = Image.open(infile)
-            resized_img = im.resize((256, 256), Image.ANTIALIAS)
-            resized_arr = np.array(resized_img)
-            images_dict[file_idx] = resized_arr.astype(np.float32)
-        except IOError:
-            print("Error")
-
-    save_obj(images_dict,"images_dict")
-    """
-    # label_mat: 2d array, each annotation file is one label_col, multiple label_col mean multiple annotation files
-    label_mat = []
-    weight_mat = []
-    image_mat = []
-
-    images_dict = load_obj("images_dict")
-    print("Return Load Images ------------------------------------")
-
-    idx= 0
-    line_limit =9960
-    # for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
-    for filename in enumerate(CLASS_NAMES):
-
-        with open("./VOCdevkit/VOC2007/ImageSets/Main/"+filename[1] +"_"+split+".txt") as fp:
-            print(fp)
-            image_mat = []
-            label_col = []
-            weight_col = []
-            line = fp.readline()
-            cnt = 1
-            while line:
-
-                label_idx = line.strip()[:-3]
-                #if (int(label_idx)>line_limit or int(label_idx)<=0):
-                #    break
-                try:
-                    # print("Line {}: {}".format(label_idx, type(label_idx)))
-                    # Be aware!! '000005 ' is different from '000005', there is a space in the first string!!!
-                    # label_idx = '000005 ' label_idx[:-1]='000005'
-                    image_mat.append(images_dict[label_idx])
-                except IOError:
-                    print("Error Line {}: {}".format(label_idx, type(label_idx)))
-
-                label_flag = int(line.strip()[-2:])
-
-                if label_flag is 0 or label_flag is -1:
-                    label_col.append(np.int32(0))
-                else:
-                    label_col.append(np.int32(1))
-
-                if label_flag is 1 or label_flag is -1:
-                    weight_col.append(np.int32(1))
-                else:
-                    weight_col.append(np.int32(0))
-
-                line = fp.readline()
-                cnt += 1
-            np_label_col = np.asarray(label_col)
-            label_mat.append(np_label_col)
-            # print(np.shape(label_mat))
-            np_weight_col = np.asarray(weight_col)
-            weight_mat.append(np_weight_col)
 
 
-    print("********************")
-    # print('image_mat {}: label_mat {}'.format(np.shape(image_mat), np.shape(label_mat)))
-    np_image_mat = np.asarray(image_mat)
-    np_label_mat = np.asarray(label_mat)
-    np_weight_mat = np.asarray(weight_mat)
-    # print('np_image_mat {}: np_label_mat {}'.format(np.shape(np_image_mat), np.shape(np_label_mat)))
-    np_trans_label_mat = np_label_mat.transpose()
-    np_trans_weight_mat = np_weight_mat.transpose()
-    # print(np.shape(np_label_mat))
-    # print(np.shape(np_weight_mat))
-    print('np_trans_label_mat {}: np_trans_weight_mat {}'.format(np.shape(np_trans_label_mat), np.shape(np_trans_weight_mat)))
-    print("Return Load Weights and Labels ------------------------------------")
-    return np_image_mat, np_trans_label_mat, np_trans_weight_mat
+def conv_1_filter():
+
+    sess = tf.Session()
+    new_saver = tf.train.import_meta_graph('./models/05_Pascal_AlexNet_0303_Test/model.ckpt-6000.meta')
+    model_test = new_saver.restore(sess,'./models/05_Pascal_AlexNet_0303_Test/model.ckpt-6000')
+    all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+    tf.global_variables_initializer()
+
+    # 5-1 pool5 features from the AlexNet
+    # w : [11* 11* 3 * 96]
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description='Train a classifier in tensorflow!')
-    parser.add_argument(
-        'data_dir', type=str, default='/home/teame-predict/Documents/ernie/ObjectClassification-tutorial',
-        help='Path to PASCAL data storage')
-    if len(sys.argv) == 1:
-        parser.print_help()
-        sys.exit(1)
-    args = parser.parse_args()
-    print("args")
-    print("#####################################")
-    return args
+    pil_images = []
+    # save 96 images in the file
+    # convert from ndarayy to PIL image
+
+    for i in range(96):
+        # all the layers' tensor
+        w = sess.run(all_vars)
+        # w[1]: get the tensor of the first layer 11*11*3*96
+        arr = w[1][:, :, :, i]
+        # img = Image.fromarray(arr)
+        scipy.misc.imsave('img{}.jpg'.format(i), arr)
+        im = scipy.misc.imread('img{}.jpg'.format(i))
+        pil_images.append(im)
+
+    print("Finish saving feature map")
+
+    height = sum(image.shape[0] for image in pil_images)
+    width = max(image.shape[1] for image in pil_images)
+    output = np.zeros((height, width, 3))
+
+    y = 0
+    for image in pil_images:
+        h, w, d = image.shape
+        output[y:y + h, 0:w] = image
+        y += h
+
+    cv2.imwrite("pool5_feature_map_6000.jpg", output)
+
+def nearest_neigbor():
+
+    sess = tf.Session()
+    new_saver = tf.train.import_meta_graph('./models/02_Pascal_AlexNet_0302_Test/model.ckpt-7000.meta')
+    model_test = new_saver.restore(sess,'./models/02_Pascal_AlexNet_0302_Test/model.ckpt-7000')
+    all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+    tf.global_variables_initializer()
+
+    # for i in range(96):
+    #     # all the layers' tensor
+    #     w = sess.run(all_vars)
+    #     # w[1]: get the tensor of the first layer 11*11*3*96
+    #     arr = w[1][:, :, :, i]
+
+    return 0
+
+    # concatenate 96 images together to 12 * 8 image grid
 
 
-def _get_el(arr, i):
-    try:
-        return arr[i]
-    except IndexError:
-        return arr
+    # widths, heights = zip(*(i.size for i in pil_images))
+    # total_width = sum(widths)
+    # max_height = max(heights)
+    # new_im = Image.new('RGB', (total_width, max_height))
+    # new_im = Image.new('RGB', ((88,88),(132,132)))
+    # x_offset = 0
+    # y_offset = 0
+    #
+    # for i in range(12):
+    #     for j in range(8):
+    #         im = pil_images[i*j+j]
+    #         new_im.paste(im, (x_offset, y_offset))
+    #         x_offset += 11
+    #     y_offset += 11
+    # new_im.save("Pool5.jpg")
+
+def mixup():
+
+    train_data = np.load(os.path.join(docs_dir, 'outfile_train_data.npy'))
+    train_labels = np.load(os.path.join(docs_dir, 'outfile_train_labels.npy'))
+    train_weights = np.load(os.path.join(docs_dir, 'outfile_train_weights.npy'))
+    eval_data = np.load(os.path.join(docs_dir, 'outfile_eval_data.npy'))
+    eval_labels = np.load(os.path.join(docs_dir, 'outfile_eval_labels.npy'))
+    eval_weights = np.load(os.path.join(docs_dir, 'outfile_eval_weights.npy'))
+
+    ind_list = [i for i in range(5011)]
+    rand_list = random.shuffle(ind_list)
+    ind_arr = np.asarray(ind_list)
+    ind_flip = np.flip(ind_arr,0)
+    train_rand = train_data[ind_flip,:,:,:]
+    label_rand = train_labels[ind_flip,:]
+
+    alpha = 0.3
+    train_final = []
+    label_final = []
+    for i in range(train_data.shape[0]):
+        train_final.append(alpha * train_data[i,:,:,:] + (1 - alpha) * train_rand[i,:,:,:])
+        label_final.append(alpha * train_labels[i,:] + (1 - alpha) * label_rand[i,:])
+
+    # train_final = alpha * train_data+(1-alpha) * train_rand
+    # label_final = alpha * eval_data + (1-alpha) * label_rand
+
+    # label_final = alpha * eval_data + (1 - alpha) * label_rand
+    # label_final = alpha * eval_data + (1 - alpha) * label_rand
+
+    im1 = train_data[1, :, :, :]
+    im2 = train_data[1, :, :, :]
+    im3 = im1 * 0.5 + im2 * 0.5
+
+    # img = Image.fromarray(im3)
+    cv2.imwrite('color_img3.jpg', im3)
+    cv2.imshow("image1", im3);
+    cv2.waitKey();
 
 
 def main():
-    # args = parse_args()
-    # print(args)
-    # Load training and eval data
-
-    # outfile_train_data = TemporaryFile()
-    # outfile_train_labels = TemporaryFile()
-    # outfile_train_weights = TemporaryFile()
-    # outfile_eval_data = TemporaryFile()
-    # outfile_eval_labels = TemporaryFile()
-    # outfile_eval_weights = TemporaryFile()
-    data_dir = './data'
-    '''
-    train_data, train_labels, train_weights = load_pascal(
-        data_dir, split='trainval')
-    eval_data, eval_labels, eval_weights = load_pascal(
-        data_dir, split='test')
-
-    # save files
-    print("Save Fast load pascal data----------------")
-
-    np.save(os.path.join(docs_dir, 'outfile_train_data'), train_data)
-    np.save(os.path.join(docs_dir, 'outfile_train_labels'), train_labels)
-    np.save(os.path.join(docs_dir, 'outfile_train_weights'), train_weights)
-    np.save(os.path.join(docs_dir, 'outfile_eval_data'), eval_data)
-    np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
-    np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
-    print("Finished Fast load pascal data----------------")
-    '''
-
     print("Fast load pascal data----------------")
     train_data = np.load(os.path.join(docs_dir, 'outfile_train_data.npy'))
     train_labels = np.load(os.path.join(docs_dir, 'outfile_train_labels.npy'))
@@ -401,8 +348,28 @@ def main():
     eval_data = np.load(os.path.join(docs_dir, 'outfile_eval_data.npy'))
     eval_labels = np.load(os.path.join(docs_dir, 'outfile_eval_labels.npy'))
     eval_weights = np.load(os.path.join(docs_dir, 'outfile_eval_weights.npy'))
-    print('train_data {}: train_labels{} train_weights{}'.format(np.shape(train_data), np.shape(train_labels),np.shape(train_weights)))
+    print('train_data {}: train_labels{} train_weights{}'.format(np.shape(train_data), np.shape(train_labels),
+                                                                 np.shape(train_weights)))
     print("Finish load pascal data----------------")
+
+    # ind_list = [i for i in range(5011)]
+    # rand_list = random.shuffle(ind_list)
+    # ind_arr = np.asarray(ind_list)
+    # ind_flip = np.flip(ind_arr,0)
+    # train_rand = train_data[ind_flip,:,:,:]
+    # label_rand = train_labels[ind_flip,:]
+    #
+    # alpha = 0.3
+    # train_final = []
+    # label_final = []
+    # for i in range(train_data.shape[0]):
+    #     train_final.append(alpha * train_data[i,:,:,:] + (1 - alpha) * train_rand[i,:,:,:])
+    #     label_final.append(alpha * train_labels[i,:] + (1 - alpha) * label_rand[i,:])
+
+    # print("train_final shape is {}".format(np.shape(train_final)))
+    # print("train_label shape is {}".format(np.shape(label_final)))
+    # train_final = np.asarray(train_final)
+    # label_final = np.asarray(label_final)
 
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
@@ -410,16 +377,17 @@ def main():
         pascal_classifier = tf.estimator.Estimator(
             model_fn=partial(cnn_model_fn,
                              num_classes=train_labels.shape[1]),
-            model_dir="./models/05_Pascal_AlexNet_0303_Test")
+            model_dir="./models/06_Mixup_0303_2_Test")
 
         tensors_to_log = {"loss": "loss"}
         logging_hook = tf.train.LoggingTensorHook(
             tensors=tensors_to_log, every_n_iter=10)
-        train_writer = tf.summary.FileWriter('./models/05_Pascal_AlexNet_0303_mAp',
+        train_writer = tf.summary.FileWriter('./models/06_Mixup_0303_2_mAp',
                                              sess.graph)
 
-        for iteration in range(1):
+        for iteration in range(50):
             # Train the model
+            step_size = 100
             train_input_fn = tf.estimator.inputs.numpy_input_fn(
                 x={"x": train_data, "w": train_weights},
                 y=train_labels,
@@ -429,9 +397,9 @@ def main():
 
             pascal_classifier.train(
                 input_fn=train_input_fn,
-                steps=1000,
+                steps=step_size,
                 hooks=[logging_hook])
-            
+
             # Evaluate the model and print results
             eval_input_fn = tf.estimator.inputs.numpy_input_fn(
                 x={"x": eval_data, "w": eval_weights},
@@ -443,21 +411,21 @@ def main():
             pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
 
             pred = np.stack([p['probabilities'] for p in pred])
-            #rand_AP = compute_map(
+            # rand_AP = compute_map(
             #    eval_labels, np.random.random(eval_labels.shape),
             #    eval_weights, average=None)
-            #print('02_Alexnet Random AP: {} mAP'.format(np.mean(rand_AP)))
-            #gt_AP = compute_map(
+            # print('02_Alexnet Random AP: {} mAP'.format(np.mean(rand_AP)))
+            # gt_AP = compute_map(
             #    eval_labels, eval_labels, eval_weights, average=None)
-            #print('02_Alexnet GT AP: {} mAP'.format(np.mean(gt_AP)))
+            # print('02_Alexnet GT AP: {} mAP'.format(np.mean(gt_AP)))
             AP = compute_map(eval_labels, pred, eval_weights, average=None)
-            print('02_Alexnet Obtained {} mAP'.format(np.mean(AP)))
+            print('06_Mixup Alexnet Obtained {} mAP'.format(np.mean(AP)))
             # print('02_Alexnet per class:')
             # for cid, cname in enumerate(CLASS_NAMES):
             #     print('{}: {}'.format(cname, _get_el(AP, cid)))
             mAp = np.mean(AP)
             summary = tf.Summary(value=[tf.Summary.Value(tag="mAP", simple_value=mAp)])
-            train_writer.add_summary(summary)
+            train_writer.add_summary(summary, iteration*step_size)
 
     '''
     sess = tf.Session()
@@ -466,6 +434,33 @@ def main():
     all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
     '''
 
-
 if __name__ == "__main__":
     main()
+
+
+'''
+import cv2
+import numpy
+import glob
+import os
+
+dir = "." # current directory
+ext = ".jpg" # whatever extension you want
+
+pathname = os.path.join(dir, "*" + ext)
+images = [cv2.imread(img) for img in glob.glob(pathname)]
+
+height = sum(image.shape[0] for image in images)
+width = max(image.shape[1] for image in images)
+output = numpy.zeros((height,width,3))
+
+y = 0
+for image in images:
+    h,w,d = image.shape
+    output[y:y+h,0:w] = image
+    y += h
+
+cv2.imwrite("test.jpg", output)
+
+
+'''
