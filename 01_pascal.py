@@ -153,11 +153,7 @@ def load_pascal(data_dir, split='train'):
             are ambiguous.
     """
     # Wrote this function
-    # idx = 0
-    # if idx >20:
-    #     idx+=1
-    #     break
-    """
+
     print("Begin Load Images ------------------------------------")
     images = []
     # images_dict -> key: img_file_idx, value: rgb image ndarray (256*256*3)
@@ -177,7 +173,7 @@ def load_pascal(data_dir, split='train'):
             print("Error")
 
     save_obj(images_dict,"images_dict")
-    """
+
     # label_mat: 2d array, each annotation file is one label_col, multiple label_col mean multiple annotation files
     label_mat = []
     weight_mat = []
@@ -188,7 +184,6 @@ def load_pascal(data_dir, split='train'):
 
     idx= 0
     line_limit =9960
-    # for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
     for filename in enumerate(CLASS_NAMES):
 
         with open("./VOCdevkit/VOC2007/ImageSets/Main/"+filename[1] +"_"+split+".txt") as fp:
@@ -232,17 +227,11 @@ def load_pascal(data_dir, split='train'):
             weight_mat.append(np_weight_col)
 
 
-    print("********************")
-    # print('image_mat {}: label_mat {}'.format(np.shape(image_mat), np.shape(label_mat)))
     np_image_mat = np.asarray(image_mat)
     np_label_mat = np.asarray(label_mat)
     np_weight_mat = np.asarray(weight_mat)
-    # print('np_image_mat {}: np_label_mat {}'.format(np.shape(np_image_mat), np.shape(np_label_mat)))
     np_trans_label_mat = np_label_mat.transpose()
     np_trans_weight_mat = np_weight_mat.transpose()
-    # print(np.shape(np_label_mat))
-    # print(np.shape(np_weight_mat))
-    print('np_trans_label_mat {}: np_trans_weight_mat {}'.format(np.shape(np_trans_label_mat), np.shape(np_trans_weight_mat)))
     print("Return Load Weights and Labels ------------------------------------")
     return np_image_mat, np_trans_label_mat, np_trans_weight_mat
 
@@ -274,30 +263,22 @@ def main():
     # args = parse_args()
     # print(args)
     # Load training and eval data
-
-    # outfile_train_data = TemporaryFile()
-    # outfile_train_labels = TemporaryFile()
-    # outfile_train_weights = TemporaryFile()
-    # outfile_eval_data = TemporaryFile()
-    # outfile_eval_labels = TemporaryFile()
-    # outfile_eval_weights = TemporaryFile()
     data_dir = '/home/teame-predict/Documents/ernie/ObjectClassification-tutorial'
 
-    # train_data, train_labels, train_weights = load_pascal(
-    #     data_dir, split='trainval')
-    # eval_data, eval_labels, eval_weights = load_pascal(
-    #     data_dir, split='test')
+    train_data, train_labels, train_weights = load_pascal(
+        data_dir, split='trainval')
+    eval_data, eval_labels, eval_weights = load_pascal(
+        data_dir, split='test')
     #
     # # save files
-    # print("Save Fast load pascal data----------------")
-    #
-    # np.save(os.path.join(docs_dir, 'outfile_train_data'), train_data)
-    # np.save(os.path.join(docs_dir, 'outfile_train_labels'), train_labels)
-    # np.save(os.path.join(docs_dir, 'outfile_train_weights'), train_weights)
-    # np.save(os.path.join(docs_dir, 'outfile_eval_data'), eval_data)
-    # np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
-    # np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
-    # print("Finished Fast load pascal data----------------")
+    print("Save Fast load pascal data----------------")
+    np.save(os.path.join(docs_dir, 'outfile_train_data'), train_data)
+    np.save(os.path.join(docs_dir, 'outfile_train_labels'), train_labels)
+    np.save(os.path.join(docs_dir, 'outfile_train_weights'), train_weights)
+    np.save(os.path.join(docs_dir, 'outfile_eval_data'), eval_data)
+    np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
+    np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
+    print("Finished Fast load pascal data----------------")
 
 
     print("Fast load pascal data----------------")

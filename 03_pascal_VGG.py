@@ -83,8 +83,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     '''
 
     # Convolutional Layer #1
-    # init = tf.initializers.random_normal()
-    # pad = 1
     conv1_1 = tf.layers.conv2d(
         inputs=input_image_layer,
         filters=64,
@@ -224,7 +222,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         "classes": tf.argmax(input=logits, axis=1),
         # Add `softmax_tensor` to the graph. It is used for PREDICT and by the
         # `logging_hook`.
-        # "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
         "probabilities": tf.nn.sigmoid(logits, name="sigmoid_tensor")
     }
 
@@ -238,8 +235,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     # Configure the Training Op (for TRAIN mode)
     if mode == tf.estimator.ModeKeys.TRAIN:
-        # optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
-        # global_step = tf.Variable(0, trainable=False)
         grad_input = tf.gradients(loss,input_layer)
         grad_conv1_1 = tf.gradients(loss, conv1_1)
         grad_conv2_1 = tf.gradients(loss, conv2_1)
@@ -422,7 +417,6 @@ def main():
     # Load training and eval data
 
     data_dir = './data'
-    '''
     train_data, train_labels, train_weights = load_pascal(
         data_dir, split='trainval')
     eval_data, eval_labels, eval_weights = load_pascal(
@@ -438,7 +432,6 @@ def main():
     np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
     np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
     print("Finished Fast load pascal data----------------")
-    '''
 
     print("Fast load pascal data----------------")
     train_data = np.load(os.path.join(docs_dir, 'outfile_train_data.npy'))

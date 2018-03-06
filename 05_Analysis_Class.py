@@ -83,8 +83,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     '''
 
     # Convolutional Layer #1
-    # init = tf.initializers.random_normal()
-    # pad = 1
     conv1_1 = tf.layers.conv2d(
         inputs=input_image_layer,
         filters=64,
@@ -199,12 +197,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     pool5 = tf.layers.max_pooling2d(inputs=conv5_3, pool_size=[2, 2], strides=2)
 
-    # Dense Layer
-    # pool5_shape = pool5.get_shape()
-    # pool5_list = pool5_shape.as_list()
-    # pool5_product = np.int32(pool5_list[1]*pool5_list[2]*pool5_list[3])
-    # pool5_flatten = tf.reshape(pool5, [-1, pool5_product])
-
     dense6 = tf.layers.conv2d(inputs=pool5, filters=4096, padding="valid", kernel_size=[7, 7], strides=(2, 2), activation=tf.nn.relu)
 
     dropout6 = tf.layers.dropout(
@@ -244,8 +236,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     # Configure the Training Op (for TRAIN mode)
     if mode == tf.estimator.ModeKeys.TRAIN:
-        # optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
-        # global_step = tf.Variable(0, trainable=False)
         grad_input = tf.gradients(loss,input_layer)
         grad_conv1_1 = tf.gradients(loss, conv1_1)
         grad_conv2_1 = tf.gradients(loss, conv2_1)
@@ -263,8 +253,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         train_op = optimizer.minimize(
             loss=loss,
             global_step=tf.train.get_global_step())
-        #tf.summary()
-        # print("Training")
+
         tf.summary.scalar(name= 'train_loss', tensor = loss )
         tf.summary.scalar(name= 'learning rate', tensor = learning_rate)
         tf.summary.histogram(name='grad_dense7', values=grad_input)
@@ -318,15 +307,13 @@ def _get_el(arr, i):
 
 
 
-
-
 def main():
     # args = parse_args()
     # print(args)
     # Load training and eval data
 
     data_dir = './data'
-    '''
+
     train_data, train_labels, train_weights = load_pascal(
         data_dir, split='trainval')
     eval_data, eval_labels, eval_weights = load_pascal(
@@ -342,7 +329,7 @@ def main():
     np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
     np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
     print("Finished Fast load pascal data----------------")
-    '''
+
 
 
 

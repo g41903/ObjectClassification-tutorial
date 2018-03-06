@@ -2,13 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="638d5de9-2650-4f39-9673-a1bc933c4e74" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03_pascal_VGG_test_backup.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/00_mnist_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/01_pascal_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/02_pascal_alexnet_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/03_pascal_VGG_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/03_pascal_VGG_test_backup.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/04_imagenet_finetune_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/05_Class_Analysis.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/00_mnist.py" afterPath="$PROJECT_DIR$/00_mnist.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/01_pascal.py" afterPath="$PROJECT_DIR$/01_pascal.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/02_pascal_alexnet.py" afterPath="$PROJECT_DIR$/02_pascal_alexnet.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/02_pascal_alexnet_test.py" afterPath="$PROJECT_DIR$/02_pascal_alexnet_test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/03_pascal_VGG_test.py" afterPath="$PROJECT_DIR$/03_pascal_VGG_test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/03_pascal_VGG.py" afterPath="$PROJECT_DIR$/03_pascal_VGG.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/05_Analysis.py" afterPath="$PROJECT_DIR$/05_Analysis.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/05_Analysis_Finetune.py" afterPath="$PROJECT_DIR$/05_Analysis_Finetune.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/06_Mixup.py" afterPath="$PROJECT_DIR$/06_Mixup.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/06_Mixup_Finetune.py" afterPath="$PROJECT_DIR$/06_Mixup_Finetune.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,51 +30,47 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="00_mnist.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/00_mnist.py">
+      <file leaf-file-name="03_pascal_VGG.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/03_pascal_VGG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-55">
-              <caret line="102" column="16" lean-forward="false" selection-start-line="102" selection-start-column="4" selection-end-line="102" selection-end-column="16" />
-              <folding>
-                <element signature="e#58#96#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="06_Mixup.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/06_Mixup.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1170">
-              <caret line="437" column="10" lean-forward="false" selection-start-line="437" selection-start-column="10" selection-end-line="437" selection-end-column="10" />
-              <folding>
-                <element signature="e#7877#9092#0" expanded="false" />
-                <element signature="e#9122#10218#0" expanded="false" />
-                <element signature="e#10238#11691#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="02_pascal_alexnet.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/02_pascal_alexnet.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1946">
-              <caret line="414" column="32" lean-forward="false" selection-start-line="414" selection-start-column="32" selection-end-line="414" selection-end-column="32" />
+            <state relative-caret-position="174">
+              <caret line="354" column="58" lean-forward="false" selection-start-line="354" selection-start-column="49" selection-end-line="354" selection-end-column="58" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
-                <element signature="e#1206#8295#0" expanded="false" />
-                <element signature="e#12625#13082#0" expanded="false" />
+                <element signature="e#13159#13565#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="eval.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eval.py">
+      <file leaf-file-name="05_Analysis.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/05_Analysis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="16" column="12" lean-forward="false" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+            <state relative-caret-position="321">
+              <caret line="267" column="49" lean-forward="false" selection-start-line="267" selection-start-column="49" selection-end-line="267" selection-end-column="49" />
+              <folding>
+                <element signature="e#0#38#0" expanded="true" />
+                <element signature="e#10631#11828#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="numpy_io.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/estimator/inputs/numpy_io.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="145">
+              <caret line="108" column="0" lean-forward="false" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="estimator.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/estimator/estimator.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="145">
+              <caret line="662" column="0" lean-forward="false" selection-start-line="662" selection-start-column="0" selection-end-line="662" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -83,18 +87,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>print</find>
-      <find>init</find>
-      <find>Image.fromarray</find>
-      <find>scipy.misc.imread</find>
-      <find>shuffle</find>
-      <find>docs_dir</find>
-      <find>05_VGG_Pretrained_Classes_0303</find>
-      <find>./models/05_VGG_Classes_0303</find>
-      <find>img_num</find>
-      <find>prediction</find>
-      <find>./mo</find>
-      <find>pred</find>
       <find>./models/06_Mixup_0303</find>
       <find>prob</find>
       <find>./models/05_NN_Not_Pretrained_0303</find>
@@ -112,7 +104,19 @@
       <find>./models</find>
       <find>train_writer</find>
       <find>06_Mixup_0303</find>
+      <find>./models/05_VGG_NN_Pool5FC7_Pretrained_0303</find>
+      <find>count</find>
+      <find>05_VGG_Pretrained_Classes_0303</find>
+      <find>get_global</find>
+      <find>global</find>
+      <find>global_step</find>
+      <find>pool5</find>
+      <find>logging_hook</find>
       <find>load</find>
+      <find>nea</find>
+      <find>near</find>
+      <find>list(pascal_classifier.predict(input_fn=eval_input_fn))</find>
+      <find>eval_input_fn</find>
     </findStrings>
     <replaceStrings>
       <replace>tf.random_normal_initializer(mean=0.0,stddev=0.01)</replace>
@@ -128,7 +132,9 @@
       <replace>./models/05_VGG_NN_Pool5FC7_Pretrained_0303</replace>
       <replace>01_mnist_training_0303</replace>
       <replace>06_Mixup_0303_2</replace>
+      <replace>./models/06_Mixup_0303_Pretrained_Train</replace>
       <replace>01_mnist_0303</replace>
+      <replace>05_VGG_Pretrained_Classes_0303_steps_</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -139,31 +145,32 @@
       <list>
         <option value="$PROJECT_DIR$/01_pascal_test.py" />
         <option value="$PROJECT_DIR$/eval.py" />
-        <option value="$PROJECT_DIR$/01_pascal.py" />
         <option value="$PROJECT_DIR$/00_mnist_test.py" />
         <option value="$PROJECT_DIR$/instpect_checkpoint.py" />
         <option value="$PROJECT_DIR$/inspect_checkpoint.py" />
-        <option value="$PROJECT_DIR$/03_pascal_VGG.py" />
         <option value="$PROJECT_DIR$/Pascal_Check_Point_Mapping" />
         <option value="$PROJECT_DIR$/VGG_Checkpoint_Mapping.py" />
         <option value="$PROJECT_DIR$/CaffeNetModel" />
         <option value="$PROJECT_DIR$/03_pascal_VGG_test.py" />
-        <option value="$PROJECT_DIR$/04_imagenet_finetune_test.py" />
-        <option value="$PROJECT_DIR$/05_Class_Analysis.py" />
-        <option value="$PROJECT_DIR$/05_Analysis.py" />
-        <option value="$PROJECT_DIR$/05_Analysis_Finetune.py" />
-        <option value="$PROJECT_DIR$/02_pascal_alexnet_test.py" />
-        <option value="$PROJECT_DIR$/02_pascal_alexnet.py" />
         <option value="$PROJECT_DIR$/00_mnist.py" />
+        <option value="$PROJECT_DIR$/04_imagenet_finetune_test.py" />
+        <option value="$PROJECT_DIR$/02_pascal_alexnet.py" />
+        <option value="$PROJECT_DIR$/03_pascal_VGG.py" />
+        <option value="$PROJECT_DIR$/05_Analysis_Finetune.py" />
+        <option value="$PROJECT_DIR$/05_Class_Analysis.py" />
+        <option value="$PROJECT_DIR$/02_pascal_alexnet_test.py" />
         <option value="$PROJECT_DIR$/06_Mixup.py" />
+        <option value="$PROJECT_DIR$/06_Mixup_Finetune.py" />
+        <option value="$PROJECT_DIR$/01_pascal.py" />
+        <option value="$PROJECT_DIR$/05_Analysis.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="299" />
-    <option name="y" value="66" />
-    <option name="width" value="766" />
-    <option name="height" value="860" />
+  <component name="ProjectFrameBounds" extendedState="4">
+    <option name="x" value="832" />
+    <option name="y" value="24" />
+    <option name="width" value="768" />
+    <option name="height" value="876" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -181,7 +188,6 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -193,10 +199,11 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../DRL/DRL HW2/DQN_Implementation.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///home/teame-predict/Documents/ernie/ObjectClassification-tutorial/VGG_Checkpoint_Mapping.py&#10;spli&#9;ACTION&#9;SplitVertically&#10;split&#9;ACTION&#9;SplitVertically&#10;indent&#9;ACTION&#9;EditorIndentLineOrSelection&#10;font&#9;ACTION&#9;EditorDecreaseFontSize" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -212,8 +219,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.06_Mixup">
-    <configuration name="00_mnist" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.05_Analysis">
+    <configuration name="02_pascal_alexnet" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -225,7 +232,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="hw1" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/00_mnist.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/02_pascal_alexnet.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -247,6 +254,40 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
+    <configuration name="03_pascal_VGG" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="hw1" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/03_pascal_VGG.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <configuration name="04_imagenet_finetune_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="hw1" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/04_imagenet_finetune_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
     <configuration name="05_Analysis" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -264,54 +305,20 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <configuration name="05_Analysis_Finetune" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="hw1" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/05_Analysis_Finetune.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
-    <configuration name="06_Mixup" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="hw1" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/06_Mixup.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.05_Analysis" />
-      <item index="1" class="java.lang.String" itemvalue="Python.05_Analysis_Finetune" />
-      <item index="2" class="java.lang.String" itemvalue="Python.00_mnist" />
-      <item index="3" class="java.lang.String" itemvalue="Python.02_pascal_alexnet_test" />
-      <item index="4" class="java.lang.String" itemvalue="Python.06_Mixup" />
+      <item index="0" class="java.lang.String" itemvalue="Python.02_pascal_alexnet_test" />
+      <item index="1" class="java.lang.String" itemvalue="Python.04_imagenet_finetune_test" />
+      <item index="2" class="java.lang.String" itemvalue="Python.02_pascal_alexnet" />
+      <item index="3" class="java.lang.String" itemvalue="Python.03_pascal_VGG" />
+      <item index="4" class="java.lang.String" itemvalue="Python.05_Analysis" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.06_Mixup" />
-        <item index="1" class="java.lang.String" itemvalue="Python.00_mnist" />
-        <item index="2" class="java.lang.String" itemvalue="Python.02_pascal_alexnet_test" />
-        <item index="3" class="java.lang.String" itemvalue="Python.05_Analysis_Finetune" />
-        <item index="4" class="java.lang.String" itemvalue="Python.05_Analysis" />
+        <item index="0" class="java.lang.String" itemvalue="Python.05_Analysis" />
+        <item index="1" class="java.lang.String" itemvalue="Python.04_imagenet_finetune_test" />
+        <item index="2" class="java.lang.String" itemvalue="Python.02_pascal_alexnet" />
+        <item index="3" class="java.lang.String" itemvalue="Python.03_pascal_VGG" />
+        <item index="4" class="java.lang.String" itemvalue="Python.02_pascal_alexnet_test" />
       </list>
     </recent_temporary>
   </component>
@@ -341,25 +348,26 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1535" height="904" extended-state="7" />
+    <frame x="832" y="24" width="768" height="876" extended-state="4" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24378778" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40443215" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3266399" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2232258" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26580647" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31612903" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41900936" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15983881" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40387097" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3525856" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -390,34 +398,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/01_pascal_test.py</url>
-          <line>291</line>
-          <option name="timeStamp" value="59" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/05_Analysis.py</url>
-          <line>344</line>
+          <line>339</line>
           <option name="timeStamp" value="182" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/05_Analysis.py</url>
-          <line>292</line>
-          <option name="timeStamp" value="185" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/04_imagenet_finetune_test.py</url>
-          <line>207</line>
-          <option name="timeStamp" value="186" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/05_Class_Analysis.py</url>
-          <line>199</line>
-          <option name="timeStamp" value="187" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/02_pascal_alexnet_test.py</url>
-          <line>453</line>
-          <option name="timeStamp" value="195" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -430,42 +413,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="197" />
+      <option name="time" value="238" />
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="np.ones(eval_labels.shape)" language="Python" />
-        <watch expression="eval_weights.shape" language="Python" />
-        <watch expression="compute_map(eval_labels, pred, tuple(np.ones(eval_labels.shape[0])), average=None)" language="Python" />
-        <watch expression="eval_labels.shape" language="Python" />
-        <watch expression="eval_labels.shape[0]" language="Python" />
-        <watch expression="tuple(np.ones(eval_labels.shape[0]))" language="Python" />
-      </configuration>
-    </watches-manager>
+    <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/03_pascal_VGG.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4560">
-          <caret line="321" column="44" lean-forward="true" selection-start-line="321" selection-start-column="44" selection-end-line="321" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-            <element signature="e#9210#13398#0" expanded="false" />
-            <element signature="e#13423#13829#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/04_imagenet_finetune_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6435">
-          <caret line="446" column="70" lean-forward="true" selection-start-line="446" selection-start-column="70" selection-end-line="446" selection-end-column="70" />
-          <folding>
-            <element signature="e#0#38#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/02_pascal_alexnet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6525">
@@ -477,12 +429,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="900">
           <caret line="60" column="9" lean-forward="false" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-            <element signature="e#8118#12470#0" expanded="false" />
-            <element signature="e#12495#12952#0" expanded="false" />
-            <element signature="e#12980#13048#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -490,9 +437,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1305">
           <caret line="104" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="523" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#38#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -502,8 +446,7 @@
           <caret line="332" column="26" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="523" selection-end-column="0" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
-            <element signature="e#9210#13398#0" expanded="false" />
-            <element signature="e#13423#13829#0" expanded="false" />
+            <element signature="e#13159#13565#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -512,9 +455,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6555">
           <caret line="454" column="0" lean-forward="true" selection-start-line="454" selection-start-column="0" selection-end-line="454" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#38#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -532,16 +473,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/01_pascal_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4695">
-          <caret line="313" column="24" lean-forward="false" selection-start-line="313" selection-start-column="19" selection-end-line="313" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/01_pascal_test.py" />
     <entry file="file://$PROJECT_DIR$/02_pascal_alexnet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6525">
@@ -553,12 +485,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="900">
           <caret line="60" column="9" lean-forward="false" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-            <element signature="e#8118#12470#0" expanded="false" />
-            <element signature="e#12495#12952#0" expanded="false" />
-            <element signature="e#12980#13048#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -583,20 +510,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/00_mnist_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1965">
-          <caret line="138" column="81" lean-forward="false" selection-start-line="138" selection-start-column="81" selection-end-line="138" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/00_mnist_test.py" />
     <entry file="file://$PROJECT_DIR$/03_pascal_VGG_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="885">
           <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#38#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -649,53 +567,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14820">
-          <caret line="1025" column="0" lean-forward="false" selection-start-line="1025" selection-start-column="0" selection-end-line="1025" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/00_mnist_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="856">
-          <caret line="138" column="81" lean-forward="false" selection-start-line="138" selection-start-column="81" selection-end-line="138" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/01_pascal.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="143" column="46" lean-forward="false" selection-start-line="143" selection-start-column="46" selection-end-line="143" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/01_pascal_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="313" column="24" lean-forward="false" selection-start-line="313" selection-start-column="19" selection-end-line="313" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/00_mnist_test.py" />
+    <entry file="file://$PROJECT_DIR$/01_pascal_test.py" />
     <entry file="file://$PROJECT_DIR$/../DRL/DRL HW2/DQN_Implementation.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/instpect_checkpoint.py" />
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/estimator/estimator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="148" column="49" lean-forward="false" selection-start-line="148" selection-start-column="48" selection-end-line="148" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/training/monitored_session.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="137">
@@ -703,183 +584,174 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inspect_checkpoint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1170">
-          <caret line="89" column="49" lean-forward="false" selection-start-line="89" selection-start-column="18" selection-end-line="89" selection-end-column="49" />
-          <folding>
-            <element signature="e#52#90#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/inspect_checkpoint.py" />
     <entry file="file://$PROJECT_DIR$/CaffeNetModel" />
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/estimator/inputs/numpy_io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="108" column="0" lean-forward="false" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/03_pascal_VGG_test_backup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5235">
-          <caret line="143" column="27" lean-forward="false" selection-start-line="143" selection-start-column="27" selection-end-line="143" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/training/checkpoint_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
           <caret line="208" column="0" lean-forward="false" selection-start-line="208" selection-start-column="0" selection-end-line="208" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/03_pascal_VGG.py">
+    <entry file="file://$PROJECT_DIR$/Pascal_Check_Point_Mapping" />
+    <entry file="file://$PROJECT_DIR$/pool5_feature_map.jpg" />
+    <entry file="file://$PROJECT_DIR$/VGG_Checkpoint_Mapping.py" />
+    <entry file="file://$PROJECT_DIR$/eval.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1869">
-          <caret line="482" column="54" lean-forward="false" selection-start-line="482" selection-start-column="54" selection-end-line="482" selection-end-column="54" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-            <element signature="e#9210#13398#0" expanded="false" />
-            <element signature="e#13423#13829#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="225">
+          <caret line="16" column="12" lean-forward="false" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/03_pascal_VGG_test_backup.py" />
     <entry file="file://$PROJECT_DIR$/03_pascal_VGG_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="534" column="33" lean-forward="false" selection-start-line="534" selection-start-column="33" selection-end-line="534" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/02_pascal_alexnet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3525">
+          <caret line="417" column="34" lean-forward="false" selection-start-line="417" selection-start-column="34" selection-end-line="417" selection-end-column="34" />
           <folding>
-            <element signature="e#0#38#0" expanded="false" />
+            <element signature="e#0#38#0" expanded="true" />
+            <element signature="e#1206#8295#0" expanded="false" />
+            <element signature="e#11718#12175#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Pascal_Check_Point_Mapping">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="664">
-          <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pool5_feature_map.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/VGG_Checkpoint_Mapping.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="66" column="24" lean-forward="false" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/05_Class_Analysis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1345">
-          <caret line="190" column="0" lean-forward="false" selection-start-line="190" selection-start-column="0" selection-end-line="190" selection-end-column="0" />
-          <folding>
-            <element signature="e#9386#9843#0" expanded="false" />
-            <element signature="e#9961#16939#0" expanded="false" />
-            <element signature="e#10064#10827#1" expanded="false" />
-            <element signature="e#10835#10905#0" expanded="false" />
-            <element signature="e#14314#14340#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="4155">
+          <caret line="306" column="0" lean-forward="false" selection-start-line="306" selection-start-column="0" selection-end-line="306" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/04_imagenet_finetune_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="348" column="0" lean-forward="false" selection-start-line="348" selection-start-column="0" selection-end-line="383" selection-end-column="78" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/05_Analysis_Finetune.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="84" column="16" lean-forward="false" selection-start-line="84" selection-start-column="16" selection-end-line="84" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#38#0" expanded="false" />
-            <element signature="e#8589#9804#0" expanded="false" />
-            <element signature="e#9834#10930#0" expanded="false" />
-            <element signature="e#10950#12403#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/05_Analysis.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="31">
-          <caret line="150" column="13" lean-forward="false" selection-start-line="150" selection-start-column="13" selection-end-line="150" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-            <element signature="e#8232#9447#0" expanded="false" />
-            <element signature="e#9477#10573#0" expanded="false" />
-            <element signature="e#10593#12046#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eval.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="16" column="12" lean-forward="false" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+        <state relative-caret-position="5745">
+          <caret line="400" column="16" lean-forward="false" selection-start-line="400" selection-start-column="16" selection-end-line="400" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/02_pascal_alexnet_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="452" column="60" lean-forward="false" selection-start-line="452" selection-start-column="48" selection-end-line="452" selection-end-column="60" />
+        <state relative-caret-position="23">
+          <caret line="263" column="17" lean-forward="true" selection-start-line="263" selection-start-column="17" selection-end-line="263" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="1599" column="0" lean-forward="true" selection-start-line="1599" selection-start-column="0" selection-end-line="1599" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/06_Mixup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="368" column="66" lean-forward="false" selection-start-line="368" selection-start-column="66" selection-end-line="368" selection-end-column="66" />
+          <folding>
+            <element signature="e#7877#9092#0" expanded="false" />
+            <element signature="e#9122#10218#0" expanded="false" />
+            <element signature="e#10238#11691#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/01_pascal.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="312" column="39" lean-forward="false" selection-start-line="312" selection-start-column="39" selection-end-line="312" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/04_imagenet_finetune.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
-            <element signature="e#8118#12470#0" expanded="false" />
-            <element signature="e#12495#12952#0" expanded="false" />
-            <element signature="e#12980#13048#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/00_mnist.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-55">
+        <state relative-caret-position="1425">
           <caret line="102" column="16" lean-forward="false" selection-start-line="102" selection-start-column="4" selection-end-line="102" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/05_Analysis_Finetune.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="63" column="57" lean-forward="false" selection-start-line="63" selection-start-column="57" selection-end-line="63" selection-end-column="57" />
           <folding>
-            <element signature="e#58#96#0" expanded="true" />
+            <element signature="e#1231#8215#0" expanded="false" />
+            <element signature="e#8247#9462#0" expanded="false" />
+            <element signature="e#9492#10588#0" expanded="false" />
+            <element signature="e#10608#12061#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/02_pascal_alexnet.py">
+    <entry file="file://$PROJECT_DIR$/06_Mixup_Finetune.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1946">
-          <caret line="414" column="32" lean-forward="false" selection-start-line="414" selection-start-column="32" selection-end-line="414" selection-end-column="32" />
+        <state relative-caret-position="380">
+          <caret line="75" column="42" lean-forward="false" selection-start-line="75" selection-start-column="42" selection-end-line="75" selection-end-column="42" />
+          <folding>
+            <element signature="e#8096#9311#0" expanded="false" />
+            <element signature="e#9341#10437#0" expanded="false" />
+            <element signature="e#10457#11910#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/03_pascal_VGG.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="354" column="58" lean-forward="false" selection-start-line="354" selection-start-column="49" selection-end-line="354" selection-end-column="58" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
-            <element signature="e#1206#8295#0" expanded="false" />
-            <element signature="e#12625#13082#0" expanded="false" />
+            <element signature="e#13159#13565#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/06_Mixup.py">
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/estimator/estimator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1170">
-          <caret line="437" column="10" lean-forward="false" selection-start-line="437" selection-start-column="10" selection-end-line="437" selection-end-column="10" />
+        <state relative-caret-position="145">
+          <caret line="662" column="0" lean-forward="false" selection-start-line="662" selection-start-column="0" selection-end-line="662" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/estimator/inputs/numpy_io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="108" column="0" lean-forward="false" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/05_Analysis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="267" column="49" lean-forward="false" selection-start-line="267" selection-start-column="49" selection-end-line="267" selection-end-column="49" />
           <folding>
-            <element signature="e#7877#9092#0" expanded="false" />
-            <element signature="e#9122#10218#0" expanded="false" />
-            <element signature="e#10238#11691#0" expanded="false" />
+            <element signature="e#0#38#0" expanded="true" />
+            <element signature="e#10631#11828#0" expanded="false" />
           </folding>
         </state>
       </provider>

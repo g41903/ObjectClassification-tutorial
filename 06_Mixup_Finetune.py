@@ -66,7 +66,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     """Model function for CNN."""
     # Input Layer
     input_layer = tf.reshape(features["x"], [-1, 256, 256, 3])
-    img_num = input_layer.get_shape().as_list()[0]
     input_image_layer = input_layer
 
     '''
@@ -202,12 +201,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     pool5 = tf.layers.max_pooling2d(inputs=conv5_3, pool_size=[2, 2], strides=2)
 
-    # Dense Layer
-    # pool5_shape = pool5.get_shape()
-    # pool5_list = pool5_shape.as_list()
-    # pool5_product = np.int32(pool5_list[1]*pool5_list[2]*pool5_list[3])
-    # pool5_flatten = tf.reshape(pool5, [-1, pool5_product])
-
     dense6 = tf.layers.conv2d(inputs=pool5, filters=4096, padding="valid", kernel_size=[7, 7], strides=(2, 2), activation=tf.nn.relu)
 
     dropout6 = tf.layers.dropout(
@@ -233,7 +226,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         "classes": tf.argmax(input=logits, axis=1),
         # Add `softmax_tensor` to the graph. It is used for PREDICT and by the
         # `logging_hook`.
-        # "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
         "probabilities": tf.nn.sigmoid(logits, name="sigmoid_tensor"),
         "pool5": pool5,
         "dense7": dense7
@@ -249,8 +241,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     # Configure the Training Op (for TRAIN mode)
     if mode == tf.estimator.ModeKeys.TRAIN:
-        # optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
-        # global_step = tf.Variable(0, trainable=False)
         starter_learning_rate = 0.001
         global_step = tf.train.get_global_step()
         learning_rate = tf.train.exponential_decay(learning_rate= starter_learning_rate, global_step = global_step,
@@ -454,24 +444,22 @@ def main():
 
     hook_object = _LossCheckerHook()
 
-    # ind_list = [i for i in range(5011)]
-    # rand_list = random.shuffle(ind_list)
-    # ind_arr = np.asarray(ind_list)
-    # ind_flip = np.flip(ind_arr,0)
-    # train_rand = train_data[ind_flip,:,:,:]
-    # label_rand = train_labels[ind_flip,:]
-    #
-    # alpha = 0.3
-    # train_final = []
-    # label_final = []
-    # for i in range(train_data.shape[0]):
-    #     train_final.append(alpha * train_data[i,:,:,:] + (1 - alpha) * train_rand[i,:,:,:])
-    #     label_final.append(alpha * train_labels[i,:] + (1 - alpha) * label_rand[i,:])
+    ind_list = [i for i in range(5011)]
+    ind_arr = np.asarray(ind_list)
+    ind_flip = np.flip(ind_arr,0)
+    train_rand = train_data[ind_flip,:,:,:]
+    label_rand = train_labels[ind_flip,:]
 
-    # print("train_final shape is {}".format(np.shape(train_final)))
-    # print("train_label shape is {}".format(np.shape(label_final)))
-    # train_final = np.asarray(train_final)
-    # label_final = np.asarray(label_final)
+    alpha = 0.3
+    train_final = []
+    label_final = []
+    for i in range(train_data.shape[0]):
+        train_final.append(alpha * train_data[i,:,:,:] + (1 - alpha) * train_rand[i,:,:,:])
+        label_final.append(alpha * train_labels[i,:] + (1 - alpha) * label_rand[i,:])
+
+    print("train_final shape is {}".format(np.shape(train_final)))
+    print("train_label shape is {}".format(np.shape(label_final)))
+
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
         sess.run(init)
@@ -542,40 +530,6 @@ def main():
         save_obj(dense7_list, "Pretrained_dense7_list")
         save_obj(pool5_list, "Pretrained_pool5_list")
 
-    '''
-    sess = tf.Session()
-    new_saver = tf.train.import_meta_graph('./models/pascal_model_scratch03-2/model.ckpt-21951.meta')
-    model_test = new_saver.restore(sess, './models/pascal_model_scratch03-2/model.ckpt-21951')
-    all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-    '''
 
 if __name__ == "__main__":
     main()
-
-
-'''
-import cv2
-import numpy
-import glob
-import os
-
-dir = "." # current directory
-ext = ".jpg" # whatever extension you want
-
-pathname = os.path.join(dir, "*" + ext)
-images = [cv2.imread(img) for img in glob.glob(pathname)]
-
-height = sum(image.shape[0] for image in images)
-width = max(image.shape[1] for image in images)
-output = numpy.zeros((height,width,3))
-
-y = 0
-for image in images:
-    h,w,d = image.shape
-    output[y:y+h,0:w] = image
-    y += h
-
-cv2.imwrite("test.jpg", output)
-
-
-'''

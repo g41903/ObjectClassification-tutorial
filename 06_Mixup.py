@@ -352,24 +352,21 @@ def main():
                                                                  np.shape(train_weights)))
     print("Finish load pascal data----------------")
 
-    # ind_list = [i for i in range(5011)]
-    # rand_list = random.shuffle(ind_list)
-    # ind_arr = np.asarray(ind_list)
-    # ind_flip = np.flip(ind_arr,0)
-    # train_rand = train_data[ind_flip,:,:,:]
-    # label_rand = train_labels[ind_flip,:]
-    #
-    # alpha = 0.3
-    # train_final = []
-    # label_final = []
-    # for i in range(train_data.shape[0]):
-    #     train_final.append(alpha * train_data[i,:,:,:] + (1 - alpha) * train_rand[i,:,:,:])
-    #     label_final.append(alpha * train_labels[i,:] + (1 - alpha) * label_rand[i,:])
+    ind_list = [i for i in range(5011)]
+    ind_arr = np.asarray(ind_list)
+    ind_flip = np.flip(ind_arr,0)
+    train_rand = train_data[ind_flip,:,:,:]
+    label_rand = train_labels[ind_flip,:]
 
-    # print("train_final shape is {}".format(np.shape(train_final)))
-    # print("train_label shape is {}".format(np.shape(label_final)))
-    # train_final = np.asarray(train_final)
-    # label_final = np.asarray(label_final)
+    alpha = 0.3
+    train_final = []
+    label_final = []
+    for i in range(train_data.shape[0]):
+        train_final.append(alpha * train_data[i,:,:,:] + (1 - alpha) * train_rand[i,:,:,:])
+        label_final.append(alpha * train_labels[i,:] + (1 - alpha) * label_rand[i,:])
+
+    print("train_final shape is {}".format(np.shape(train_final)))
+    print("train_label shape is {}".format(np.shape(label_final)))
 
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
@@ -427,40 +424,13 @@ def main():
             summary = tf.Summary(value=[tf.Summary.Value(tag="mAP", simple_value=mAp)])
             train_writer.add_summary(summary, iteration*step_size)
 
-    '''
-    sess = tf.Session()
-    new_saver = tf.train.import_meta_graph('./models/pascal_model_scratch03-2/model.ckpt-21951.meta')
-    model_test = new_saver.restore(sess, './models/pascal_model_scratch03-2/model.ckpt-21951')
-    all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-    '''
+        '''
+        sess = tf.Session()
+        new_saver = tf.train.import_meta_graph('./models/pascal_model_scratch03-2/model.ckpt-21951.meta')
+        model_test = new_saver.restore(sess, './models/pascal_model_scratch03-2/model.ckpt-21951')
+        all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+        '''
 
 if __name__ == "__main__":
     main()
 
-
-'''
-import cv2
-import numpy
-import glob
-import os
-
-dir = "." # current directory
-ext = ".jpg" # whatever extension you want
-
-pathname = os.path.join(dir, "*" + ext)
-images = [cv2.imread(img) for img in glob.glob(pathname)]
-
-height = sum(image.shape[0] for image in images)
-width = max(image.shape[1] for image in images)
-output = numpy.zeros((height,width,3))
-
-y = 0
-for image in images:
-    h,w,d = image.shape
-    output[y:y+h,0:w] = image
-    y += h
-
-cv2.imwrite("test.jpg", output)
-
-
-'''

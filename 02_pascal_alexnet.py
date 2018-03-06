@@ -253,14 +253,14 @@ def load_pascal(data_dir, split='train'):
     # Wrote this function
 
     print("Begin Load Images ------------------------------------")
+
     # images_dict: key: img_file_idx, value: rgb image ndarray (256*256*3)
     images_dict = {}
-    # count
+
     for infile in glob.glob("./VOCdevkit/VOC2007/JPEGImages/*.jpg"):
         # reshape the images to 256*256*3
         file, ext = os.path.splitext(infile)
         file_idx = file[-6:]
-
         try:
             im = Image.open(infile)
             resized_img = im.resize((256, 256), Image.ANTIALIAS)
@@ -276,11 +276,9 @@ def load_pascal(data_dir, split='train'):
     weight_mat = []
     image_mat = []
 
-    images_dict = load_obj("images_dict")
     print("Return Load Images ------------------------------------")
+    images_dict = load_obj("images_dict")
 
-    idx= 0
-    line_limit =9960
     # for filename in os.listdir("./VOCdevkit/VOC2007/ImageSets/Main/"):
     for filename in enumerate(CLASS_NAMES):
 
@@ -292,14 +290,9 @@ def load_pascal(data_dir, split='train'):
             line = fp.readline()
             cnt = 1
             while line:
-
                 label_idx = line.strip()[:-3]
-                #if (int(label_idx)>line_limit or int(label_idx)<=0):
-                #    break
+
                 try:
-                    # print("Line {}: {}".format(label_idx, type(label_idx)))
-                    # Be aware!! '000005 ' is different from '000005', there is a space in the first string!!!
-                    # label_idx = '000005 ' label_idx[:-1]='000005'
                     image_mat.append(images_dict[label_idx])
                 except IOError:
                     print("Error Line {}: {}".format(label_idx, type(label_idx)))
@@ -324,19 +317,11 @@ def load_pascal(data_dir, split='train'):
             np_weight_col = np.asarray(weight_col)
             weight_mat.append(np_weight_col)
 
-
-    print("********************")
-    # print('image_mat {}: label_mat {}'.format(np.shape(image_mat), np.shape(label_mat)))
     np_image_mat = np.asarray(image_mat)
     np_label_mat = np.asarray(label_mat)
     np_weight_mat = np.asarray(weight_mat)
-    # print('np_image_mat {}: np_label_mat {}'.format(np.shape(np_image_mat), np.shape(np_label_mat)))
     np_trans_label_mat = np_label_mat.transpose()
     np_trans_weight_mat = np_weight_mat.transpose()
-    # print(np.shape(np_label_mat))
-    # print(np.shape(np_weight_mat))
-    print('np_trans_label_mat {}: np_trans_weight_mat {}'.format(np.shape(np_trans_label_mat), np.shape(np_trans_weight_mat)))
-    print("Return Load Weights and Labels ------------------------------------")
     return np_image_mat, np_trans_label_mat, np_trans_weight_mat
 
 
@@ -367,14 +352,8 @@ def main():
     # print(args)
     # Load training and eval data
 
-    # outfile_train_data = TemporaryFile()
-    # outfile_train_labels = TemporaryFile()
-    # outfile_train_weights = TemporaryFile()
-    # outfile_eval_data = TemporaryFile()
-    # outfile_eval_labels = TemporaryFile()
-    # outfile_eval_weights = TemporaryFile()
     data_dir = './data'
-    '''
+
     train_data, train_labels, train_weights = load_pascal(
         data_dir, split='trainval')
     eval_data, eval_labels, eval_weights = load_pascal(
@@ -382,7 +361,6 @@ def main():
 
     # save files
     print("Save Fast load pascal data----------------")
-
     np.save(os.path.join(docs_dir, 'outfile_train_data'), train_data)
     np.save(os.path.join(docs_dir, 'outfile_train_labels'), train_labels)
     np.save(os.path.join(docs_dir, 'outfile_train_weights'), train_weights)
@@ -390,7 +368,7 @@ def main():
     np.save(os.path.join(docs_dir, 'outfile_eval_labels'), eval_labels)
     np.save(os.path.join(docs_dir, 'outfile_eval_weights'), eval_weights)
     print("Finished Fast load pascal data----------------")
-    '''
+
 
     print("Fast load pascal data----------------")
     train_data = np.load(os.path.join(docs_dir, 'outfile_train_data.npy'))
@@ -399,7 +377,6 @@ def main():
     eval_data = np.load(os.path.join(docs_dir, 'outfile_eval_data.npy'))
     eval_labels = np.load(os.path.join(docs_dir, 'outfile_eval_labels.npy'))
     eval_weights = np.load(os.path.join(docs_dir, 'outfile_eval_weights.npy'))
-    print('train_data {}: train_labels{} train_weights{}'.format(np.shape(train_data), np.shape(train_labels),np.shape(train_weights)))
     print("Finish load pascal data----------------")
 
     pascal_classifier = tf.estimator.Estimator(

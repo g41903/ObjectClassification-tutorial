@@ -65,7 +65,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
     # Write this function
     """Model function for CNN."""
     # Input Layer
-    # print('Feature shape {}: {}'.format(features, np.shape(labels)))
     input_layer = tf.reshape(features["x"], [-1, 256, 256, 3])
     img_num = input_layer.get_shape().as_list()[0]
     input_image_layer = []
@@ -83,16 +82,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         print('img_num shape {}: input_layer is {} '.format(img_num, np.shape(input_layer.get_shape().as_list())))
         print("img_num is None")
 
-    # filter1 = tf.random_normal(shape=[11,11,3,96])
-    # conv1 = tf.layers.conv2d(
-    #     inputs=input_layer,
-    #     filters=32,
-    #     kernel_size=[5, 5],
-    #     padding="same",
-    #     activation=tf.nn.relu)
     # Convolutional Layer #1
-
-    # init = tf.initializers.random_normal()
     conv1 = tf.layers.conv2d(
         inputs=input_image_layer,
         filters=96,
@@ -102,7 +92,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         strides=(4, 4),
         padding="valid",
         activation=tf.nn.relu)
-    # bias_layer_1 = tf.nn.bias_add(conv1, biases_1_array)
+
     # Pooling Layer #1
     pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[3, 3], strides=2)
 
@@ -118,6 +108,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         strides=(1, 1),
         padding="same",
         activation=tf.nn.relu)
+
     pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[3, 3], strides=2)
 
     # Convolutional Layer #3 and Pooling Layer #3
@@ -154,12 +145,11 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         kernel_size=[3, 3],
         strides=(1, 1),
         padding="same")
+
     pool5 = tf.layers.max_pooling2d(inputs=conv5, pool_size=[3, 3], strides=2)
 
     # Dense Layer
     pool5_shape = pool5.get_shape()
-    # print(".....................................")
-    # print("pool5_shape is {}".format(np.shape(pool5_shape)))
     pool5_list = pool5_shape.as_list()
     pool5_product = np.int32(pool5_list[1]*pool5_list[2]*pool5_list[3])
     pool5_flat = tf.reshape(pool5, [-1, pool5_product])
@@ -183,7 +173,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         "classes": tf.argmax(input=logits, axis=1),
         # Add `softmax_tensor` to the graph. It is used for PREDICT and by the
         # `logging_hook`.
-        # "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
         "probabilities": tf.nn.sigmoid(logits, name="sigmoid_tensor"),
         "pool5": pool5,
         "dense7": dense7
@@ -199,8 +188,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
     # Configure the Training Op (for TRAIN mode)
     if mode == tf.estimator.ModeKeys.TRAIN:
-        # optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
-        # global_step = tf.Variable(0, trainable=False)
         starter_learning_rate = 0.001
         global_step = tf.train.get_global_step()
         learning_rate = tf.train.exponential_decay(learning_rate= starter_learning_rate, global_step = global_step,
@@ -248,8 +235,6 @@ def conv_1_filter():
 
     # 5-1 pool5 features from the AlexNet
     # w : [11* 11* 3 * 96]
-
-
     pil_images = []
     # save 96 images in the file
     # convert from ndarayy to PIL image
@@ -280,38 +265,53 @@ def conv_1_filter():
 
 def nearest_neigbor():
 
-    sess = tf.Session()
-    new_saver = tf.train.import_meta_graph('./models/02_Pascal_AlexNet_0302_Test/model.ckpt-7000.meta')
-    model_test = new_saver.restore(sess,'./models/02_Pascal_AlexNet_0302_Test/model.ckpt-7000')
-    all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-    tf.global_variables_initializer()
+    # Please uncomment if there is no images_dict
+    '''
+    print("Begin Load Images ------------------------------------")
+    images = []
+    # images_dict -> key: img_file_idx, value: rgb image ndarray (256*256*3)
+    images_dict = {}
+    # count
+    for infile in glob.glob("./VOCdevkit/VOC2007/JPEGImages/*.jpg"):
+        # reshape the images to 256*256*3
+        file, ext = os.path.splitext(infile)
+        file_idx = file[-6:]
 
-    # for i in range(96):
-    #     # all the layers' tensor
-    #     w = sess.run(all_vars)
-    #     # w[1]: get the tensor of the first layer 11*11*3*96
-    #     arr = w[1][:, :, :, i]
+        try:
+            im = Image.open(infile)
+            resized_img = im.resize((256, 256), Image.ANTIALIAS)
+            resized_arr = np.array(resized_img)
+            images_dict[file_idx] = resized_arr.astype(np.float32)
+        except IOError:
+            print("Error")
+    
+    save_obj(images_dict,"images_dict")
+    '''
+    imgs_dict = load_obj("images_dict")
+    
+    # pictures in diffeent classes
+    labels_idx = ['000067','000015','000040','000069','000144','000054','000071','000049','000006','000025','000006','000018']
+    eval_imgs = []
+    for label_idx in labels_idx:
+        eval_imgs.append(imgs_dict[label_idx])
+    eval_imgs = np.asarray(eval_imgs)
+    img_num = np.shape(eval_imgs)[0]
+    eval_imgs_label = np.ones((img_num,20))
+    eval_imgs_weights = np.ones((img_num,20))
+    pool5_partial_test = nearest_neighbor_inference(eval_imgs,eval_imgs_label,eval_imgs_weights)
+
+    pool5_list = load_obj("Final_No_Pretrained_pool5_list")
+    pool5_flattened = np.reshape(pool5_list, [np.shape(pool5_list)[0], -1])
+
+    pool5_partial_test_flattened = np.reshape(pool5_partial_test, [np.shape(pool5_partial_test)[0], -1])
+
+    nbrs = NearestNeighbors(n_neighbors=2, algorithm='ball_tree').fit(pool5_flattened)
+    distances, indices = nbrs.kneighbors(pool5_partial_test_flattened)
+    print('pool5_list {}: distances{} train_labels{}'.format(np.shape(pool5_list), distances, indices))
 
     return 0
 
-    # concatenate 96 images together to 12 * 8 image grid
 
-
-    # widths, heights = zip(*(i.size for i in pil_images))
-    # total_width = sum(widths)
-    # max_height = max(heights)
-    # new_im = Image.new('RGB', (total_width, max_height))
-    # new_im = Image.new('RGB', ((88,88),(132,132)))
-    # x_offset = 0
-    # y_offset = 0
-    #
-    # for i in range(12):
-    #     for j in range(8):
-    #         im = pil_images[i*j+j]
-    #         new_im.paste(im, (x_offset, y_offset))
-    #         x_offset += 11
-    #     y_offset += 11
-    # new_im.save("Pool5.jpg")
 
 def mixup():
 
@@ -336,11 +336,6 @@ def mixup():
         train_final.append(alpha * train_data[i,:,:,:] + (1 - alpha) * train_rand[i,:,:,:])
         label_final.append(alpha * train_labels[i,:] + (1 - alpha) * label_rand[i,:])
 
-    # train_final = alpha * train_data+(1-alpha) * train_rand
-    # label_final = alpha * eval_data + (1-alpha) * label_rand
-
-    # label_final = alpha * eval_data + (1 - alpha) * label_rand
-    # label_final = alpha * eval_data + (1 - alpha) * label_rand
 
     im1 = train_data[1, :, :, :]
     im2 = train_data[1, :, :, :]
@@ -352,37 +347,52 @@ def mixup():
     cv2.waitKey();
 
 
+def nearest_neighbor_inference(eval_imgs,eval_imgs_label,eval_imgs_weights):
+
+    init = tf.global_variables_initializer()
+    with tf.Session() as sess:
+        sess.run(init)
+        pascal_classifier = tf.estimator.Estimator(
+            model_fn=partial(cnn_model_fn,
+                             num_classes=20),
+            model_dir="./models/05_VGG_NN_Pool5FC7_No_Pretrained_0303_Test")
+
+        tensors_to_log = {"loss": "loss"}
+
+        for iteration in range(1):
+
+            # Evaluate the model and print results
+            eval_input_fn = tf.estimator.inputs.numpy_input_fn(
+                x={"x": eval_imgs, "w": eval_imgs_weights},
+                y=eval_imgs_label,
+                batch_size=1,
+                num_epochs=1,
+                shuffle=False)
+            pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
+            pred_pool5 = np.stack([p['pool5'] for p in pred])
+            pred_dense7 = np.stack([p['dense7'] for p in pred])
+            print("pool5: {} dense7: {}".format(np.shape(pred_pool5),np.shape(pred_dense7)))
+            print("------")
+
+            save_obj(pred_pool5, "pool5_test")
+            save_obj(pred_dense7, "dense7_test")
+    return pred_pool5
+
+
 def main():
     count = 0
-    print("Fast load pascal data----------------")
-    train_data = np.load(os.path.join(docs_dir, 'outfile_train_data.npy'))
-    train_labels = np.load(os.path.join(docs_dir, 'outfile_train_labels.npy'))
-    train_weights = np.load(os.path.join(docs_dir, 'outfile_train_weights.npy'))
-    eval_data = np.load(os.path.join(docs_dir, 'outfile_eval_data.npy'))
-    eval_labels = np.load(os.path.join(docs_dir, 'outfile_eval_labels.npy'))
-    eval_weights = np.load(os.path.join(docs_dir, 'outfile_eval_weights.npy'))
-    print('train_data {}: train_labels{} train_weights{}'.format(np.shape(train_data), np.shape(train_labels),
-                                                                 np.shape(train_weights)))
-    print("Finish load pascal data----------------")
+    # print("Fast load pascal data----------------")
+    # train_data = np.load(os.path.join(docs_dir, 'outfile_train_data.npy'))
+    # train_labels = np.load(os.path.join(docs_dir, 'outfile_train_labels.npy'))
+    # train_weights = np.load(os.path.join(docs_dir, 'outfile_train_weights.npy'))
+    # eval_data = np.load(os.path.join(docs_dir, 'outfile_eval_data.npy'))
+    # eval_labels = np.load(os.path.join(docs_dir, 'outfile_eval_labels.npy'))
+    # eval_weights = np.load(os.path.join(docs_dir, 'outfile_eval_weights.npy'))
+    # print('train_data {}: train_labels{} train_weights{}'.format(np.shape(train_data), np.shape(train_labels),
+    #                                                              np.shape(train_weights)))
+    # print("Finish load pascal data----------------")
 
-    # ind_list = [i for i in range(5011)]
-    # rand_list = random.shuffle(ind_list)
-    # ind_arr = np.asarray(ind_list)
-    # ind_flip = np.flip(ind_arr,0)
-    # train_rand = train_data[ind_flip,:,:,:]
-    # label_rand = train_labels[ind_flip,:]
-    #
-    # alpha = 0.3
-    # train_final = []
-    # label_final = []
-    # for i in range(train_data.shape[0]):
-    #     train_final.append(alpha * train_data[i,:,:,:] + (1 - alpha) * train_rand[i,:,:,:])
-    #     label_final.append(alpha * train_labels[i,:] + (1 - alpha) * label_rand[i,:])
 
-    # print("train_final shape is {}".format(np.shape(train_final)))
-    # print("train_label shape is {}".format(np.shape(label_final)))
-    # train_final = np.asarray(train_final)
-    # label_final = np.asarray(label_final)
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
         sess.run(init)
@@ -399,38 +409,39 @@ def main():
         pool5_list = []
         dense7_list = []
 
-        for iteration in range(50):
+        for iteration in range(1):
             # Train the model
-            train_input_fn = tf.estimator.inputs.numpy_input_fn(
-                x={"x": train_data, "w": train_weights},
-                y=train_labels,
-                batch_size=100,
-                num_epochs=None,
-                shuffle=True)
-
-            pascal_classifier.train(
-                input_fn=train_input_fn,
-                steps=100,
-                hooks=[logging_hook])
+            # train_input_fn = tf.estimator.inputs.numpy_input_fn(
+            #     x={"x": train_data, "w": train_weights},
+            #     y=train_labels,
+            #     batch_size=100,
+            #     num_epochs=None,
+            #     shuffle=True)
+            #
+            # pascal_classifier.train(
+            #     input_fn=train_input_fn,
+            #     steps=100,
+            #     hooks=[logging_hook])
 
             # Evaluate the model and print results
             eval_input_fn = tf.estimator.inputs.numpy_input_fn(
                 x={"x": eval_data, "w": eval_weights},
                 y=eval_labels,
-                batch_size=32,
+                batch_size=1,
                 num_epochs=1,
                 shuffle=False)
 
             pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
-            pred = np.stack([p['probabilities'] for p in pred])
+            pred_pool5 = np.stack([p['pool5'] for p in pred])
+            pred_dense7 = np.stack([p['dense7'] for p in pred])
             # dense7 shape = (4096,1)
-            dense7 = p['dense7']
-            # pool5 shape: (6, 6, 256)
-            pool5 = p['pool5']
-            pool5_list.append(pool5)
-            dense7_list.append(dense7)
-
-            # print("dense7: {} pool5: {}".format(np.shape(dense7),np.shape(pool5)))
+            # dense7 = p['dense7']
+            # # pool5 shape: (6, 6, 256)
+            # pool5 = p['pool5']
+            # pool5_list.append(pred_pool5)
+            # dense7_list.append(pred_dense7)
+            print("pool5: {} dense7: {}".format(np.shape(pred_pool5),np.shape(pred_dense7)))
+            print("------")
             # rand_AP = compute_map(
             #    eval_labels, np.random.random(eval_labels.shape),
             #    eval_weights, average=None)
@@ -438,54 +449,28 @@ def main():
             # gt_AP = compute_map(
             #    eval_labels, eval_labels, eval_weights, average=None)
             # print('02_Alexnet GT AP: {} mAP'.format(np.mean(gt_AP)))
-            AP = compute_map(eval_labels, pred, eval_weights, average=None)
-            print('05_Analysis Obtained {} mAP'.format(np.mean(AP)))
+            # AP = compute_map(eval_labels, pred, eval_weights, average=None)
+            # print('05_Analysis Obtained {} mAP'.format(np.mean(AP)))
             # print('02_Alexnet per class:')
             # for cid, cname in enumerate(CLASS_NAMES):
             #     print('{}: {}'.format(cname, _get_el(AP, cid)))
             # count += 1
             # scipy.misc.imsave('./features/conv_feature_outputs/dense7_{}.jpg'.format(count), pool5[:, :, 1:4])
             # scipy.misc.imsave('./features/conv_feature_outputs/dense7_{}.jpg'.format(count), dense7[:, :, 1:4])
-            mAp = np.mean(AP)
-            summary = tf.Summary(value=[tf.Summary.Value(tag="mAP", simple_value=mAp)])
-            train_writer.add_summary(summary)
-        save_obj(dense7_list, "No_Pretrained_dense7_list")
-        save_obj(pool5_list, "No_Pretrained_pool5_list")
+            # mAp = np.mean(AP)
+            # summary = tf.Summary(value=[tf.Summary.Value(tag="mAP", simple_value=mAp)])
+            # train_writer.add_summary(summary)
+            save_obj(pred_pool5, "Final_No_Pretrained_pool5_list")
+            save_obj(pred_dense7, "Final_No_Pretrained_dense7_list")
 
-    '''
-    sess = tf.Session()
-    new_saver = tf.train.import_meta_graph('./models/pascal_model_scratch03-2/model.ckpt-21951.meta')
-    model_test = new_saver.restore(sess, './models/pascal_model_scratch03-2/model.ckpt-21951')
-    all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-    '''
+
+        '''
+        sess = tf.Session()
+        new_saver = tf.train.import_meta_graph('./models/pascal_model_scratch03-2/model.ckpt-21951.meta')
+        model_test = new_saver.restore(sess, './models/pascal_model_scratch03-2/model.ckpt-21951')
+        all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+        '''
 
 if __name__ == "__main__":
-    main()
-
-
-'''
-import cv2
-import numpy
-import glob
-import os
-
-dir = "." # current directory
-ext = ".jpg" # whatever extension you want
-
-pathname = os.path.join(dir, "*" + ext)
-images = [cv2.imread(img) for img in glob.glob(pathname)]
-
-height = sum(image.shape[0] for image in images)
-width = max(image.shape[1] for image in images)
-output = numpy.zeros((height,width,3))
-
-y = 0
-for image in images:
-    h,w,d = image.shape
-    output[y:y+h,0:w] = image
-    y += h
-
-cv2.imwrite("test.jpg", output)
-
-
-'''
+    # main()
+    nearest_neigbor()

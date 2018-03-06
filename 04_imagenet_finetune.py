@@ -280,7 +280,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
 
         summary_hook = tf.train.SummarySaverHook(
             10,
-            output_dir='./models/05_VGG_Pretrained_Classes_0303_Test',
+            output_dir='./models/05_VGG_Pretrained_Classes_0303_steps__Test',
             summary_op=tf.summary.merge_all())
 
         return tf.estimator.EstimatorSpec(
@@ -407,12 +407,12 @@ def main():
 
     with tf.Session() as sess:
         sess.run(init)
-        train_writer = tf.summary.FileWriter('./models/05_VGG_Pretrained_Classes_0303_mAp',
+        train_writer = tf.summary.FileWriter('./models/05_VGG_Pretrained_Classes_0303_steps__mAp',
                                              sess.graph)
         pascal_classifier = tf.estimator.Estimator(
             model_fn=partial(cnn_model_fn,
                              num_classes=train_labels.shape[1]),
-            model_dir="./models/05_VGG_Pretrained_Classes_0303_Train")
+            model_dir="./models/05_VGG_Pretrained_Classes_0303_steps__Train")
 
         tensors_to_log = {"loss": "loss"}
         logging_hook = tf.train.LoggingTensorHook(
@@ -420,7 +420,8 @@ def main():
 
 
         # Train the model
-        for iteration in range(40):
+        for iteration in range(50):
+            step_size = 100
             train_input_fn = tf.estimator.inputs.numpy_input_fn(
                 x={"x": train_data, "w": train_weights},
                 y=train_labels,
@@ -430,7 +431,7 @@ def main():
 
             pascal_classifier.train(
                 input_fn=train_input_fn,
-                steps=100,
+                steps=step_size,
                 hooks=[logging_hook, hook_object])
 
             # Evaluate the model and print results
@@ -458,7 +459,7 @@ def main():
 
             mAp = np.mean(AP)
             summary = tf.Summary(value=[tf.Summary.Value(tag="mAP",simple_value=mAp)])
-            train_writer.add_summary(summary)
+            train_writer.add_summary(summary, iteration*step_size)
         train_writer.flush()
 
 
